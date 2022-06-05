@@ -1,0 +1,42 @@
+[package]
+name = "another_merkle_tree"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.57"
+len-trait = "0.6.1"
+serde = { version = "1.0.137", features = ["derive"] }
+rustc-serialize = "0.3.24" # Needed for documentation
+
+[features]
+blake3_hash = ["blake3"]
+sha256_hash = ["ring", "digest"]
+
+[dependencies.blake3]
+version = "1.2.0"
+optional = true
+
+[dependencies.digest]
+version = "0.10.1"
+optional = true
+
+[dependencies.ring]
+version = "0.17.0-alpha.11"
+optional = true
+
+[dev-dependencies]
+blake3 = "1.2.0"
+digest = "0.10.1"
+md5 = "0.7.0"
+merkle_light = "0.3.1"
+rayon = "1.5.3"
+ring = "0.17.0-alpha.11"
+rs_merkle = "1.1.0"
+rustc-serialize = "0.3.24"
+serde_json = "1.0"
+sha2 = "0.10.2"
+
+[[bench]]
+name = "merkle-blake3-bench"
+required-features = ["blake3_hash"]

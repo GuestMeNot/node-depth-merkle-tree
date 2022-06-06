@@ -76,7 +76,7 @@ mod tests {
     const SINGLE_CHAR_VALUES: [&str; 6] = ["a", "b", "c", "d", "e", "f"];
 
     #[bench]
-    fn bench_blake3_another_merkle_tree(bencher: &mut Bencher) {
+    fn bench_blake3_node_depth_merkle_tree(bencher: &mut Bencher) {
         // hash the leaves first.
         let leaves = blake3_hash_leaf_values(&SINGLE_CHAR_VALUES);
         bencher.iter(|| BlakeMerkleTree::build(&leaves));

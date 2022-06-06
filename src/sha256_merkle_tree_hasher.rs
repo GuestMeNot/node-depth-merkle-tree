@@ -7,7 +7,7 @@ use crate::merkle_tree_hasher::LEAF_PREFIX;
 #[cfg(any(feature = "sha256_hash", test, bench))]
 use crate::MerkleTreeHasher;
 
-#[cfg(any(feature = "sha256_hash", test, bench))]
+#[cfg(any(test))]
 use crate::utils::hash_values;
 
 /// Hasher for a Merkle Tree using SHA-256 Hashing. Enabled using the 'sha256_hash' feature.

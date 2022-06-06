@@ -2,7 +2,7 @@
 mod tests {
 
     use len_trait::Len;
-    use rustc_serialize::hex::{FromHex, ToHex};
+    use rustc_serialize::hex::ToHex;
 
     use crate::{Blake3MerkleTreeHasher, BlakeMerkleTree, MerkleTree, MerkleTreeHasher, Sha256MerkleTree};
     use crate::blake3_merkle_tree_hasher::blake3_hash_leaf_values;
@@ -64,7 +64,7 @@ mod tests {
     fn sha256_hash_test() {
         let tree = Sha256MerkleTree::build(&sha256_hash_leaf_values(&SINGLE_CHAR_VALUES)).unwrap();
         let root = tree.root().to_hex();
-        assert_eq!("0dc6349cbc708cbf510c0d4bf90a6f936472a2ba44ffbb5b461615aa8ddd93b6", root);
+        assert_eq!("52a195c0c851e24cf9e99cf7f61552bd24d25a1fb784a5657b3b9d4634aec633", root);
     }
 
     #[test]

@@ -1,5 +1,4 @@
 use std::marker::PhantomData;
-use rustc_serialize::hex::ToHex;
 
 use serde::{Deserialize, Serialize};
 
@@ -30,19 +29,18 @@ impl<T: AsRef<[u8]> + Copy + PartialEq, H: MerkleTreeHasher<T> + Default> Merkle
         let mut interior_node_level_prefix = <H as MerkleTreeHasher<T>>::non_leaf_node_starting_prefix();
         let siblings_wo_leaf = &self.sibling_hashes[..&self.sibling_hashes.len() - 1];
 
-        for idx in 0..siblings_wo_leaf.len() {
+        for (idx, sibling_hash) in siblings_wo_leaf.iter().enumerate() {
 
-            let sibling_hash = siblings_wo_leaf[idx];
             let mut incremented = false;
 
             if is_odd(current_idx) {
-                hash = <H as MerkleTreeHasher<T>>::hash_non_leaf_node(&interior_node_level_prefix, &sibling_hash, &hash);
+                hash = <H as MerkleTreeHasher<T>>::hash_non_leaf_node(&interior_node_level_prefix, sibling_hash, &hash);
             } else {
-                if sibling_hash == hash {
+                if sibling_hash == &hash {
                     interior_node_level_prefix[0] = increment_or_wrap_around(interior_node_level_prefix[0], wrap_to_value);
                     incremented = true;
                 }
-                hash = <H as MerkleTreeHasher<T>>::hash_non_leaf_node(&interior_node_level_prefix, &hash, &sibling_hash);
+                hash = <H as MerkleTreeHasher<T>>::hash_non_leaf_node(&interior_node_level_prefix, &hash, sibling_hash);
             }
 
             if !incremented && is_odd(num_leaves_for_level) {

@@ -5,7 +5,21 @@ Creates a Merkle Tree.
    1. Merkle Tree hash calculations are CPU intensive and ideally shouldn't block to other CPU activities.
    2. merkle_light is single-threaded.
    3. rs_merkle is slower in example benchmarks cases than merkle_lite and this implementation.
-   
+
+ ## Build commands
+
+ Create the rustdocs:
+
+    cargo rustdoc  --all-targets --all-features
+
+ Run the Benchmarks:
+
+    cargo bench --all-features
+
+  Run the tests
+
+     cargo test
+
 
  ## Design Priorities
 

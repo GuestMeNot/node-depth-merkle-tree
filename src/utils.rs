@@ -2,6 +2,7 @@
 
 /// Internal use convenience function to hash strings into a [Vec] of type T.
 #[doc(hidden)]
+#[cfg(any(test))]
 pub(crate) fn hash_values<T, H>(values: &[&str], hash_fn: H) -> Vec<T>
     where T: Clone + AsRef<[u8]>,
           H: Fn(&[u8]) -> T {

@@ -8,7 +8,6 @@ use crate::{add_1_if_odd, count_tree_nodes, increment_or_wrap_around, is_odd, Me
 
 #[cfg(any(test))]
 use std::ops::Index;
-use rustc_serialize::hex::ToHex;
 
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -43,7 +42,7 @@ impl<T: AsRef<[u8]> + Copy, H: Copy + Default + MerkleTreeHasher<T>> MerkleTree<
 
             // Interestingly splitting the creation of leaf_hash_value into a separate function
             // dramatically degrades performance, even despite using #[inline(always)]
-            let leaf_hash_value = <H as MerkleTreeHasher<T>>::hash_leaf(&leaf);
+            let leaf_hash_value = <H as MerkleTreeHasher<T>>::hash_leaf(leaf);
 
             merkle_tree.tree.push(leaf_hash_value);
         }
@@ -79,8 +78,6 @@ impl<T: AsRef<[u8]> + Copy, H: Copy + Default + MerkleTreeHasher<T>> MerkleTree<
                 let rhs = &merkle_tree.tree[rhs_idx];
 
                 let hash_val = <H as MerkleTreeHasher<T>>::hash_non_leaf_node(&interior_node_level_prefix, lhs, rhs);
-
-                println!("i={} l[{}]={} r[{}]={} -> h[{}]={}", interior_node_level_prefix.as_ref().to_hex(), lhs_idx, lhs.as_ref().to_hex(), rhs_idx, rhs.as_ref().to_hex(), merkle_tree.tree.len(), hash_val.as_ref().to_hex());
 
                 // Collecting the hash values in a Vec before adding them the tree slows things considerably.
                 // This observation rules out functional programming for now...

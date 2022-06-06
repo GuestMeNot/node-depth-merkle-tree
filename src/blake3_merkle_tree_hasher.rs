@@ -4,7 +4,7 @@ use crate::merkle_tree_hasher::LEAF_PREFIX;
 #[cfg(any(feature = "blake3_hash", test, bench))]
 use crate::MerkleTreeHasher;
 
-#[cfg(any(feature = "blake3_hash", test, bench))]
+#[cfg(any(test))]
 use crate::utils::hash_values;
 
 

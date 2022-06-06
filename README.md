@@ -2,9 +2,10 @@ Creates a Merkle Tree.
 
  ## Why another Merkle Tree?
 
-   1. merkle trees hash calculations are CPU intensive and shouldn't block to other processes.
+   1. Merkle Tree hash calculations are CPU intensive and ideally shouldn't block to other CPU activities.
    2. merkle_light is single-threaded.
-   3. rs_merkle is slower in example test cases vs. merkle_lite.
+   3. rs_merkle is slower in example benchmarks cases than merkle_lite and this implementation.
+   
 
  ## Design Priorities
 
@@ -14,9 +15,9 @@ Creates a Merkle Tree.
       Unit tests are added to check various Second Preimage attacks.
 
       See: <https://djsec.wordpress.com/2018/02/21/attacking-merkle-trees-with-a-second-preimage-attack/>
+   
 
-
-   2. Maximize Performance - Ease of use and Readability are somewhat sacrificed in favor of
+   2. Performance - Ease of use and Readability are somewhat sacrificed in favor of
       performance. Merkle trees can be CPU intensive and should be calculated quickly.
       Floating point arithmetic and complex calculations are avoided.
       Use of simple usize addition and any arithmetic which the compiler will convert to quick operations.
@@ -27,6 +28,7 @@ Creates a Merkle Tree.
    3. Maximizing performance is more important that saving space unless the space is dramatically
       increased for a small bump in performance.
 
+
    4. Usage Simplicity
 
          a. Rolling back changes, and other fancy features are not supported.
@@ -36,6 +38,7 @@ Creates a Merkle Tree.
 
          c. By looking at code samples, usage should be straightforward.
 
+
    5. Flexibility - There should be a way to modify certain expected behaviors without obfuscating the code.
 
          a. We want to be able the change the hash function as needed and be able to use any
@@ -43,24 +46,28 @@ Creates a Merkle Tree.
 
          b. We want to be able to change the hash length as needed.
 
-         c. Allow future a implementation to perform concurrent hash calculation.
+         c. Allow future the implementation to perform concurrent hash calculation.
+
 
    6. Code Readability - Where performance, security and flexibility are not sacrificed,
-      the code should be straightforward. Fancy features other than generics and
-      passing hash functions should be avoided. Bit-twiddling is generally avoided.
+         the code should be straightforward. Fancy features other than generics and
+         passing hash functions should be avoided. Bit-twiddling is generally avoided.
+
 
    7. Minimize requirements on the Caller.
 
-       a. If leaf uniqueness is required, the caller may call [`Vec.dedup()`](Vec) or [`Vec.unique()`](Vec) beforehand.
+         a. If leaf uniqueness is required, the caller must ensure that is the case beforehand.
 
-       b. No non-standard traits the caller needs to implement other than [MerkleTreeHasher].
+         b. No non-standard traits the caller needs to implement other than 
+             [MerkleTreeHasher](src/merkle_tree_hasher.rs).
 
-       c. The choice of how to hash should be a calling code decision.
+         c. The choice of how to hash should be a calling code decision.
+   
+         d. Supply a few common [MerkleTreeHasher](src/merkle_tree_hasher.rs)s implementations.
 
-       d. Supply a few common [MerkleTreeHasher]s implementations.
-
-       e. Allow callers to [Serialize](serde::Serialize) and [Deserialize](serde::Deserialize)
-            [MerkleTree] and [MerkleProof] using serde.
+         e. Allow callers to [Serialize](https://docs.serde.rs/serde/ser/trait.Serialize.html)
+             and [Deserialize](https://docs.serde.rs/serde/de/trait.Deserialize.html) a 
+             [MerkleTree](src/merkle_tree.rs) and [MerkleProof](src/merkle_proof.rs) using serde.
    
  ## Benchmarking:
 
@@ -72,11 +79,10 @@ Creates a Merkle Tree.
    2. Rayon's par_iter() slowed generation of merkle tree hashes:
        <https://docs.rs/rayon/0.6.0/rayon/par_iter/index.html>
 
-   3. Hashers are generally faster than concatenating bytes before hashing.
-       This is a calling code decision.
-
-   4. Creating \[\[u8; xx\]\] and passing them one \[u8; xx\] at a time to Hashers is slow.
-
+   3. Updating Hashers incrementally, is generally faster than concatenating bytes before hashing.
+      Likewise creating a \[\[u8; xx\]\] array and passing the values one \[u8; xx\] at a time is also slow.
+      Either way, this is a calling code decision.
+   
  ## Upcoming Goals:
 
    1. Non-blocking - Play fairly with other activities on the machine.

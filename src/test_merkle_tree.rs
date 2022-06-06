@@ -2,11 +2,12 @@
 mod tests {
 
     use len_trait::Len;
-    use rustc_serialize::hex::ToHex;
+    use rustc_serialize::hex::{FromHex, ToHex};
 
     use crate::{Blake3MerkleTreeHasher, BlakeMerkleTree, MerkleTree, MerkleTreeHasher, Sha256MerkleTree};
     use crate::blake3_merkle_tree_hasher::blake3_hash_leaf_values;
     use crate::merkle_tree_hasher::LEAF_PREFIX;
+    use crate::sha256_merkle_tree_hasher::sha256_hash_leaf_values;
     use crate::utils::hash_values;
 
     const SINGLE_CHAR_VALUES: [&str; 6] = ["a", "b", "c", "d", "e", "f"];
@@ -61,7 +62,7 @@ mod tests {
     /// <b>WARNING</b>: The hash value needs to be changed if the code changes!
     #[test]
     fn sha256_hash_test() {
-        let tree = Sha256MerkleTree::build(&blake3_hash_leaf_values(&SINGLE_CHAR_VALUES)).unwrap();
+        let tree = Sha256MerkleTree::build(&sha256_hash_leaf_values(&SINGLE_CHAR_VALUES)).unwrap();
         let root = tree.root().to_hex();
         assert_eq!("0dc6349cbc708cbf510c0d4bf90a6f936472a2ba44ffbb5b461615aa8ddd93b6", root);
     }

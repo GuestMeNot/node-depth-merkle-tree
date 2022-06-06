@@ -1,5 +1,5 @@
 [package]
-name = "another_merkle_tree"
+name = "node_depth_merkle_tree"
 version = "0.1.0"
 edition = "2021"
 

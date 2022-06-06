@@ -10,7 +10,7 @@ use crate::MerkleTreeHasher;
 #[cfg(any(feature = "sha256_hash", test, bench))]
 use crate::utils::hash_values;
 
-/// Hash using  SHA-256 Hashing. Enabled using the 'sha256_hash' feature.
+/// Hasher for a Merkle Tree using SHA-256 Hashing. Enabled using the 'sha256_hash' feature.
 ///
 /// This [MerkleTreeHasher] will behave as expected in a multi-threaded environment.
 #[cfg(any(feature = "sha256_hash", test, bench))]

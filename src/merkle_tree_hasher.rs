@@ -11,7 +11,6 @@ pub(crate) const NON_LEAF_NODE_STARTING_PREFIX: [u8; 1] = [1_u8];
 ///
 /// [MerkleTreeHasher] implementations are expected to behave well in a multi-threaded environment.
 pub trait MerkleTreeHasher<T: Copy> {
-
     /// The name of the [MerkleTreeHasher] implementation.
     ///
     /// Needed to identify which hasher created a [MerkleTree](crate::MerkleTree)

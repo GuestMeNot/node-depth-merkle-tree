@@ -20,6 +20,10 @@ Creates a Merkle Tree.
 
      cargo test
 
+  Run fmt
+
+     cargo fmt --all -- --check
+
 
  ## Design Priorities
 
@@ -48,7 +52,7 @@ Creates a Merkle Tree.
          a. Rolling back changes, and other fancy features are not supported.
             Adding async makes the API trickier. This could be handled internally if needed.
    
-         b. The Api should be straightforward. It should be idiomatic Rust.
+         b. The Api should be straightforward and minimal. It should be idiomatic Rust.
 
          c. By looking at code samples, usage should be straightforward.
 

@@ -5,9 +5,8 @@ extern crate test;
 #[cfg(test)]
 mod tests {
 
-    use test::Bencher;
-
     use ring::digest::{Context, SHA256};
+    use test::Bencher;
 
     const SINGLE_CHAR_VALUES: [&str; 6] = ["a", "b", "c", "d", "e", "f"];
 
@@ -49,8 +48,10 @@ mod tests {
     }
 
     fn hash_values<T, H>(values: &[&str], hash_fn: H) -> Vec<T>
-        where T: Clone + AsRef<[u8]>,
-              H: Fn(&[&[u8]]) -> T {
+    where
+        T: Clone + AsRef<[u8]>,
+        H: Fn(&[&[u8]]) -> T,
+    {
         let mut hashes: Vec<T> = Vec::with_capacity(values.len());
         for value in values {
             let arr = [value.as_bytes()];

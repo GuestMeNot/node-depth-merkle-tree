@@ -4,11 +4,12 @@ use anyhow::Result;
 use len_trait::{Empty, Len};
 use serde::{Deserialize, Serialize};
 
-use crate::{add_1_if_odd, count_tree_nodes, increment_or_wrap_around, is_odd, MerkleProof, MerkleTreeHasher};
+use crate::{
+    add_1_if_odd, count_tree_nodes, increment_or_wrap_around, is_odd, MerkleProof, MerkleTreeHasher,
+};
 
 #[cfg(any(test))]
 use std::ops::Index;
-
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct MerkleTree<T: Copy + Sized, H: Default + MerkleTreeHasher<T>> {
@@ -19,14 +20,14 @@ pub struct MerkleTree<T: Copy + Sized, H: Default + MerkleTreeHasher<T>> {
 }
 
 impl<T: AsRef<[u8]> + Copy, H: Copy + Default + MerkleTreeHasher<T>> MerkleTree<T, H> {
-
     /// Builds a [MerkleTree] from leaves of type T and a [MerkleTreeHasher] of type H.
     pub fn build(leaves: &[T]) -> Result<MerkleTree<T, H>> {
         let num_leaves = leaves.len();
         let exact_node_count = count_tree_nodes(num_leaves);
 
         let hash_mgr = H::default();
-        let interior_node_starting_prefix = <H as MerkleTreeHasher<T>>::non_leaf_node_starting_prefix();
+        let interior_node_starting_prefix =
+            <H as MerkleTreeHasher<T>>::non_leaf_node_starting_prefix();
         let wrap_to_value = <H as MerkleTreeHasher<T>>::wrap_to_value();
 
         // Interestingly creating the MerkleTree near the end of this function dramatically
@@ -39,7 +40,6 @@ impl<T: AsRef<[u8]> + Copy, H: Copy + Default + MerkleTreeHasher<T>> MerkleTree<
         };
 
         for leaf in leaves {
-
             // Interestingly splitting the creation of leaf_hash_value into a separate function
             // dramatically degrades performance, even despite using #[inline(always)]
             let leaf_hash_value = <H as MerkleTreeHasher<T>>::hash_leaf(leaf);
@@ -67,17 +67,26 @@ impl<T: AsRef<[u8]> + Copy, H: Copy + Default + MerkleTreeHasher<T>> MerkleTree<
                 let lhs_idx = count + non_leaf_nodes_calculated;
 
                 // If this is the last index for a tree level then use the last index for the level.
-                let rhs_idx = if count == actual_level_count_idx { lhs_idx } else { lhs_idx + 1 };
+                let rhs_idx = if count == actual_level_count_idx {
+                    lhs_idx
+                } else {
+                    lhs_idx + 1
+                };
 
                 // if the number of leaves is odd, thwart an attacker inserting an extra leaf with the same hash as the last leaf.
                 if lhs_idx == rhs_idx {
-                    interior_node_level_prefix[0] = increment_or_wrap_around(interior_node_level_prefix[0], wrap_to_value);
+                    interior_node_level_prefix[0] =
+                        increment_or_wrap_around(interior_node_level_prefix[0], wrap_to_value);
                 }
 
                 let lhs = &merkle_tree.tree[lhs_idx];
                 let rhs = &merkle_tree.tree[rhs_idx];
 
-                let hash_val = <H as MerkleTreeHasher<T>>::hash_non_leaf_node(&interior_node_level_prefix, lhs, rhs);
+                let hash_val = <H as MerkleTreeHasher<T>>::hash_non_leaf_node(
+                    &interior_node_level_prefix,
+                    lhs,
+                    rhs,
+                );
 
                 // Collecting the hash values in a Vec before adding them the tree slows things considerably.
                 // This observation rules out functional programming for now...
@@ -88,7 +97,8 @@ impl<T: AsRef<[u8]> + Copy, H: Copy + Default + MerkleTreeHasher<T>> MerkleTree<
             }
 
             // Merkle Tree Second Preimage attacks are a little harder when hashing with a tree level.
-            interior_node_level_prefix[0] = increment_or_wrap_around(interior_node_level_prefix[0], 1);
+            interior_node_level_prefix[0] =
+                increment_or_wrap_around(interior_node_level_prefix[0], 1);
 
             non_leaf_nodes_calculated += actual_level_count;
 
@@ -109,7 +119,6 @@ impl<T: AsRef<[u8]> + Copy, H: Copy + Default + MerkleTreeHasher<T>> MerkleTree<
 
     ///  Builds a Merkle Proof for the leaf_index.
     pub fn build_proof(&self, leaf_index: usize) -> Result<MerkleProof<T, H>> {
-
         let mut actual_level_count = self.num_leaves;
 
         let mut current_level_idx = leaf_index;
@@ -171,21 +180,14 @@ impl<T: AsRef<[u8]> + Copy, H: Copy + Default + MerkleTreeHasher<T>> MerkleTree<
     }
 
     /// Returns the Merkle Tree root.
-    pub fn root(&self) -> T { self.tree[self.tree.len() - 1] }
-
+    pub fn root(&self) -> T {
+        self.tree[self.tree.len() - 1]
+    }
 }
-
-
-//impl<T: Copy, H: Default + MerkleTreeHasher<T>> AsSlice for MerkleTree<T, H> {
-//    type Element = T;
-//    fn as_slice(&self) -> &[T] {
-//        self.tree.as_slice()
-//    }
-//}
 
 /// Only implemented in 'test' configuration.
 #[cfg(any(test))]
-impl<T: Copy + ?Sized, H: Default + MerkleTreeHasher<T>> Index<usize> for MerkleTree<T, H> where {
+impl<T: Copy + ?Sized, H: Default + MerkleTreeHasher<T>> Index<usize> for MerkleTree<T, H> {
     type Output = T;
     fn index(&self, index: usize) -> &T {
         &self.tree[index]
@@ -205,11 +207,10 @@ impl<T: Copy, H: Default + MerkleTreeHasher<T>> Len for MerkleTree<T, H> {
     }
 }
 
-
 impl<T: Copy + PartialEq + Sized, H: Default + MerkleTreeHasher<T>> PartialEq for MerkleTree<T, H> {
     fn eq(&self, other: &Self) -> bool {
-        self.num_leaves == other.num_leaves &&
-            self.hash_name == other.hash_name &&
-            self.tree.eq(&other.tree)
+        self.num_leaves == other.num_leaves
+            && self.hash_name == other.hash_name
+            && self.tree.eq(&other.tree)
     }
 }

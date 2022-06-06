@@ -4,8 +4,10 @@
 #[doc(hidden)]
 #[cfg(any(test))]
 pub(crate) fn hash_values<T, H>(values: &[&str], hash_fn: H) -> Vec<T>
-    where T: Clone + AsRef<[u8]>,
-          H: Fn(&[u8]) -> T {
+where
+    T: Clone + AsRef<[u8]>,
+    H: Fn(&[u8]) -> T,
+{
     let mut hashes: Vec<T> = Vec::with_capacity(values.len());
     for value in values {
         let hash = hash_fn(value.as_bytes());

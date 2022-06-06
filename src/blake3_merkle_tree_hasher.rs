@@ -7,7 +7,6 @@ use crate::MerkleTreeHasher;
 #[cfg(any(test))]
 use crate::utils::hash_values;
 
-
 /// Hash using blake3::Hasher. Enabled using the 'blake3_hash' feature.
 ///
 /// Blake3 was chosen as an example vs. Kangaroo12 to allow fast hashing on commodity hardware.
@@ -41,7 +40,6 @@ impl MerkleTreeHasher<[u8; 32]> for Blake3MerkleTreeHasher {
     }
 }
 
-
 /// Convenience function used for testing to create Blake3 hashes from strs.
 #[cfg(any(test))]
 #[doc(hidden)]
@@ -59,4 +57,3 @@ fn blake3_hash_into_bytes(value: &[u8]) -> [u8; 32] {
     hasher.update(value);
     hasher.finalize().as_bytes().to_owned()
 }
-

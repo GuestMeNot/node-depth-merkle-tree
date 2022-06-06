@@ -1,8 +1,8 @@
 #[cfg(test)]
 mod tests {
 
-    use crate::BlakeMerkleTree;
     use crate::blake3_merkle_tree_hasher::blake3_hash_leaf_values;
+    use crate::BlakeMerkleTree;
 
     const SINGLE_CHAR_VALUES: [&str; 6] = ["a", "b", "c", "d", "e", "f"];
 

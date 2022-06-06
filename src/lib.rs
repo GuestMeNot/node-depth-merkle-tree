@@ -1,4 +1,7 @@
 
+//! Crate Features
+#![doc = document_features::document_features!()]
+
 
 pub use crate::merkle_tree_hasher::{MerkleTreeHasher};
 #[cfg(any(feature = "blake3_hash", test, bench))]

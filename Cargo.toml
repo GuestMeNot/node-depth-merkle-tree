@@ -7,11 +7,18 @@ edition = "2021"
 anyhow = "1.0.57"
 len-trait = "0.6.1"
 serde = { version = "1.0.137", features = ["derive"] }
-rustc-serialize = "0.3.24" # Needed for documentation
+rustc-serialize = "0.3.24" # Needed for rustdoc code
+
+## Enable this when building the docs
+document-features = { version = "0.2.1", optional = true }
 
 [features]
-blake3_hash = ["blake3"]
+## Enable creation of a Merkle Tree using SHA-256 hashing.
 sha256_hash = ["ring", "digest"]
+
+#! The following feature is experimental
+## Enable creation of a Merkle Tree using Blake3 hashing.
+blake3_hash = ["blake3"]
 
 [dependencies.blake3]
 version = "1.2.0"

@@ -8,6 +8,7 @@ Creates a Merkle Tree.
 
  ## Example
 
+  This example assumes we have enabled the 'sha256_hash' feature:
 ```
   use node_depth_merkle_tree::Sha256MerkleTree;
   use rustc_serialize::hex::FromHex;

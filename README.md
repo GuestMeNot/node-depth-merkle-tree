@@ -6,7 +6,24 @@ Creates a Merkle Tree.
    2. merkle_light is single-threaded.
    3. rs_merkle is slower in example benchmarks cases than merkle_lite and this implementation.
 
+ ## Example
+
+```
+  let item1 = 
+    <&[u8; 32]>::try_from("52a195c0c851e24cf9e99cf7f61552bd24d25a1fb784a5657b3b9d4634aec633".from_hex().unwrap().as_slice()).unwrap();
+  let item2 = 
+    <&[u8; 32]>::try_from("edd5d4b7c614215ae12bbe871e2cf2f5f76747d3789f8809dc545c2cf45e4867".from_hex().unwrap().as_slice()).unwrap();
+  let items = vec!(item1, item2);
+  let tree = Sha256MerkleTree::build(&items).unwrap();
+  let root = tree.root();
+```
+
  ## Build commands
+
+ Install and Run Cargo Readme
+
+    cargo install cargo-readme
+    cargo readme > README.md
 
  Create the rustdocs:
 

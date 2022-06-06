@@ -9,6 +9,7 @@ Creates a Merkle Tree.
  ## Example
 
 ```
+  use node_depth_merkle_tree::Sha256MerkleTree;
   let item1 = 
     <&[u8; 32]>::try_from("52a195c0c851e24cf9e99cf7f61552bd24d25a1fb784a5657b3b9d4634aec633".from_hex().unwrap().as_slice()).unwrap();
   let item2 = 

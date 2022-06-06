@@ -10,13 +10,27 @@ Creates a Merkle Tree.
 
 ```
   use node_depth_merkle_tree::Sha256MerkleTree;
-  let item1 = 
-    <&[u8; 32]>::try_from("52a195c0c851e24cf9e99cf7f61552bd24d25a1fb784a5657b3b9d4634aec633".from_hex().unwrap().as_slice()).unwrap();
-  let item2 = 
-    <&[u8; 32]>::try_from("edd5d4b7c614215ae12bbe871e2cf2f5f76747d3789f8809dc545c2cf45e4867".from_hex().unwrap().as_slice()).unwrap();
-  let items = vec!(item1, item2);
+  use rustc_serialize::hex::FromHex;
+  
+  let item1: [u8; 32] = *<&[u8; 32]>::try_from(
+      "52a195c0c851e24cf9e99cf7f61552bd24d25a1fb784a5657b3b9d4634aec633"
+          .from_hex()
+          .unwrap()
+          .as_slice(),
+  )
+  .unwrap();
+
+  let item2: [u8; 32] = *<&[u8; 32]>::try_from(
+      "edd5d4b7c614215ae12bbe871e2cf2f5f76747d3789f8809dc545c2cf45e4867"
+          .from_hex()
+          .unwrap()
+          .as_slice(),
+  )
+  .unwrap();
+  
+  let items = vec![item1, item2];
   let tree = Sha256MerkleTree::build(&items).unwrap();
-  let root = tree.root();
+  let _root = tree.root();
 ```
 
  ## Build commands

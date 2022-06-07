@@ -9,7 +9,7 @@
 
 Current version: {{version}}
 
-## Example
+### Example
 
 
  1. This example assumes the **`sha256_hash`** feature is enabled:
@@ -74,7 +74,7 @@ Current version: {{version}}
  let _root = tree.root();
  ```
 
- ## Design Priorities
+ ### Design Priorities
 
    1. Security - Performance is sacrificed to avoid Merkle Tree Second Preimage attacks.
       Duplication of the last leaf is not possible for this merkle tree implementation.
@@ -136,7 +136,7 @@ Current version: {{version}}
              and [Deserialize](https://docs.serde.rs/serde/de/trait.Deserialize.html) a 
              [MerkleTree](src/merkle_tree.rs) and [MerkleProof](src/merkle_proof.rs) using serde.
    
- ## Benchmarking:
+ ### Benchmarking:
 
  Simplified benchmarking showed that while generating hash for each level:
 
@@ -150,7 +150,7 @@ Current version: {{version}}
       Likewise creating a \[\[u8; xx\]\] array and passing the values one \[u8; xx\] at a time is also slow.
       Either way, this is a calling code decision.
 
- ## Build commands
+ ### Build commands
 
  Install and Run Cargo Readme
 
@@ -174,7 +174,7 @@ Current version: {{version}}
      cargo fmt --all -- --check
 
 
- ## Upcoming Goals:
+ ### Upcoming Goals:
 
    1. Non-blocking - Play fairly with other activities on the machine.
       Hashing is a relatively expensive operation. Some folks recommend

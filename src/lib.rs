@@ -7,7 +7,7 @@
 //! 3. rs_merkle is slower in example benchmarks cases than merkle_lite and this implementation.
 //!
 //!
-//! Crate Features
+//! ## Crate Features
 #![doc = document_features::document_features!()]
 
 #[cfg(any(feature = "blake3_hash", test, bench))]

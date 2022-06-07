@@ -2,7 +2,9 @@
 # {{crate}}
 
 {{readme}}
+
   **`sha256_hash`** - enables MerkleTree and MerkleProof creation using SHA-256.
+
   **`blake3_hash`** - enables MerkleTree and MerkleProof creation using Blake3.
 
 Current version: {{version}}

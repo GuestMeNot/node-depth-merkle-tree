@@ -4,6 +4,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::{increment_or_wrap_around, is_odd, MerkleTreeHasher};
 
+/// Holds data needed for a Merkle Proof for a given index.
+/// The Merkle Proof is created by [`MerkleTree.build_proof`](crate.MerkleTree.build_proof())
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct MerkleProof<T: Copy + Sized, H: MerkleTreeHasher<T> + Default> {
     pub(crate) leaf_index: usize,
@@ -16,6 +18,7 @@ pub struct MerkleProof<T: Copy + Sized, H: MerkleTreeHasher<T> + Default> {
 }
 
 impl<T: AsRef<[u8]> + Copy + PartialEq, H: MerkleTreeHasher<T> + Default> MerkleProof<T, H> {
+    /// Determine whether or not the specified leaf is valid for this Merkle Proof.
     pub fn validate_proof(&self, leaf: &T) -> bool {
         let mut hash = <H as MerkleTreeHasher<T>>::hash_leaf(leaf);
         if self.leaf_hash != hash {

@@ -1,3 +1,12 @@
+//! Creates a Merkle Tree and Merkle Proof.
+//!
+//! ## Why another Merkle Tree?
+//!
+//! 1. Merkle Tree hash calculations are CPU intensive and ideally shouldn't block to other CPU activities.
+//! 2. merkle_light is single-threaded.
+//! 3. rs_merkle is slower in example benchmarks cases than merkle_lite and this implementation.
+//!
+//!
 //! Crate Features
 #![doc = document_features::document_features!()]
 
@@ -13,6 +22,8 @@ pub use crate::merkle_tree::MerkleTree;
 use crate::utils::{add_1_if_odd, count_tree_nodes, increment_or_wrap_around, is_odd};
 
 mod blake3_merkle_tree_hasher;
+
+
 mod merkle_proof;
 mod merkle_tree;
 mod merkle_tree_hasher;

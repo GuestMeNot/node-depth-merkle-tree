@@ -11,6 +11,7 @@ use crate::{
 #[cfg(any(test))]
 use std::ops::Index;
 
+/// A Merkle Tree.
 #[derive(Debug, Serialize, Deserialize)]
 pub struct MerkleTree<T: Copy + Sized, H: Default + MerkleTreeHasher<T>> {
     num_leaves: usize,

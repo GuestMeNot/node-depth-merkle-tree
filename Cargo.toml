@@ -11,10 +11,13 @@ serde = { version = "1.0.137", features = ["derive"] }
 rustc-serialize = "0.3.24" # Needed for rustdoc code
 
 [features]
+## By default we enable the `sha-256` feature.
+default = [ "sha256_hash"]
+
 ## Enable creation of a Merkle Tree using SHA-256 hashing.
 ##
-## Specifically this feature enables the use of Sha256MerkleTree,
-## and Sha256MerkleTreeHasher.
+## Specifically this feature enables the use of `Sha256MerkleTree`,
+## and `Sha256MerkleTreeHasher`.
 sha256_hash = ["ring", "digest"]
 
 #! The following feature is experimental

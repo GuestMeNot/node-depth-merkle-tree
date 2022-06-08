@@ -1,7 +1,7 @@
 #[cfg(any(feature = "sha256_hash", test, bench))]
 use ring::digest::{Context, SHA256};
 
-#[cfg(any(feature = "blake3_hash", test, bench))]
+#[cfg(any(feature = "sha256_hash", test, bench))]
 use crate::merkle_tree_hasher::LEAF_PREFIX;
 
 #[cfg(any(feature = "sha256_hash", test, bench))]

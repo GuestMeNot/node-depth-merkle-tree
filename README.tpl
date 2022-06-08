@@ -5,14 +5,16 @@ Current version: {{version}}
 
 {{readme}}
 
+  **`default`** - enables the **`sha256_hash`** feature.
+
   **`sha256_hash`** - enables MerkleTree and MerkleProof creation using SHA-256.
 
   **`blake3_hash`** - enables MerkleTree and MerkleProof creation using Blake3.
 
-### Example
+### Examples
 
 
- 1. This example assumes the **`sha256_hash`** feature is enabled:
+ This example assumes the **`sha256_hash`** feature is enabled:
 ```
  extern crate rustc_serialize;
 
@@ -43,7 +45,7 @@ Current version: {{version}}
  let _root = tree.root();
  ```
 
- 2. This example assumes the **`blake3_hash`** feature is enabled:
+ This example assumes the **`blake3_hash`** feature is enabled:
 ```
  extern crate rustc_serialize;
 

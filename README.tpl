@@ -7,9 +7,13 @@ Current version: {{version}}
 
   **`default`** - enables the **`sha256_hash`** feature.
 
-  **`sha256_hash`** - enables MerkleTree and MerkleProof creation using SHA-256.
-
   **`blake3_hash`** - enables MerkleTree and MerkleProof creation using Blake3.
+
+  **`keccak256_hash`** - enables MerkleTree and MerkleProof creation using Keccak-256.
+
+  **`md5_hash`** - enables MerkleTree and MerkleProof creation using MD5.
+
+  **`sha256_hash`** - enables MerkleTree and MerkleProof creation using SHA-256.
 
 ### Examples
 

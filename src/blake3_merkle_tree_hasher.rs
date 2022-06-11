@@ -2,12 +2,23 @@
 use crate::merkle_tree_hasher::LEAF_PREFIX;
 
 #[cfg(any(feature = "blake3_hash", test, bench))]
+use crate::MerkleTree;
+
+#[cfg(any(feature = "blake3_hash", test, bench))]
 use crate::MerkleTreeHasher;
 
 #[cfg(any(test))]
 use crate::utils::hash_values;
 
-/// Hash using blake3::Hasher. Enabled using the 'blake3_hash' feature.
+
+/// Create a [MerkleTree] using [Blake3MerkleTreeHasher].
+///
+/// Enabled using the 'blake3_hash' feature.
+#[cfg(any(feature = "blake3_hash", test, bench))]
+pub type BlakeMerkleTree = MerkleTree<[u8; 32], Blake3MerkleTreeHasher>;
+
+
+/// Hash using [`blake3::Hasher`](blake3::Hasher). Enabled using the 'blake3_hash' feature.
 ///
 /// Blake3 was chosen as an example vs. Kangaroo12 to allow fast hashing on commodity hardware.
 /// For blockchain miners, this levels the playing field for smaller validators and consequently

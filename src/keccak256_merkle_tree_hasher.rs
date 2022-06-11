@@ -1,31 +1,33 @@
-#[cfg(any(feature = "sha256_hash", test, bench))]
+#[cfg(any(feature = "keccak256_hash", test, bench))]
 use ring::digest::{Context, SHA256};
 
-#[cfg(any(feature = "sha256_hash", test, bench))]
+#[cfg(any(feature = "keccak256_hash", test, bench))]
 use crate::merkle_tree_hasher::LEAF_PREFIX;
+
+#[cfg(any(feature = "keccak256_hash", test, bench))]
 use crate::MerkleTree;
 
-#[cfg(any(feature = "sha256_hash", test, bench))]
+#[cfg(any(feature = "keccak256_hash", test, bench))]
 use crate::MerkleTreeHasher;
 
 #[cfg(any(test))]
 use crate::utils::hash_values;
 
 
-/// Create a [MerkleTree] using [Sha256MerkleTreeHasher]. Enabled using the 'sha256_hash' feature.
-#[cfg(any(feature = "sha256_hash", test, bench))]
-pub type Sha256MerkleTree = MerkleTree<[u8; 32], Sha256MerkleTreeHasher>;
+/// Create a [MerkleTree] using [Keccak256MerkleTreeHasher]. Enabled using the 'keccak256_hash' feature.
+#[cfg(any(feature = "keccak256_hash", test, bench))]
+pub type Keccak256MerkleTree = MerkleTree<[u8; 32], Keccak256MerkleTreeHasher>;
 
 
-/// Hasher for a Merkle Tree using SHA-256 Hashing. Enabled using the 'sha256_hash' feature.
+/// Hasher for a Merkle Tree using Keccak-256 Hashing. Enabled using the 'keccak256_hash' feature.
 ///
 /// This [MerkleTreeHasher] will behave as expected in a multi-threaded environment.
-#[cfg(any(feature = "sha256_hash", test, bench))]
+#[cfg(any(feature = "keccak256_hash", test, bench))]
 #[derive(Clone, Copy, Debug, Default)]
-pub struct Sha256MerkleTreeHasher {}
+pub struct Keccak256MerkleTreeHasher {}
 
-#[cfg(any(feature = "sha256_hash", test, bench))]
-impl MerkleTreeHasher<[u8; 32]> for Sha256MerkleTreeHasher {
+#[cfg(any(feature = "keccak256_hash", test, bench))]
+impl MerkleTreeHasher<[u8; 32]> for Keccak256MerkleTreeHasher {
     fn name(&self) -> String {
         "SHA-256".to_string()
     }
@@ -48,19 +50,19 @@ impl MerkleTreeHasher<[u8; 32]> for Sha256MerkleTreeHasher {
     }
 }
 
-/// Convenience function used for testing to create SHA-256 hashes from strs.
+/// Convenience function used for testing to create Keccak-256 hashes from strs.
 #[cfg(any(test))]
 #[doc(hidden)]
 #[inline(always)]
-pub(crate) fn sha256_hash_leaf_values(values: &[&str]) -> Vec<[u8; 32]> {
-    hash_values(values, sha256_hash_into_bytes)
+pub(crate) fn keccak256_hash_leaf_values(values: &[&str]) -> Vec<[u8; 32]> {
+    hash_values(values, keccak256_hash_into_bytes)
 }
 
-/// Convenience function used for testing to create SHA-256 hashes.
+/// Convenience function used for testing to create Keccak-256 hashes.
 #[cfg(any(test))]
 #[doc(hidden)]
 #[inline(always)]
-pub(crate) fn sha256_hash_into_bytes(value: &[u8]) -> [u8; 32] {
+pub(crate) fn keccak256_hash_into_bytes(value: &[u8]) -> [u8; 32] {
     let mut context = ring::digest::Context::new(&SHA256);
     context.update(value);
     let digest = context.finish();

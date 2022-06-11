@@ -11,16 +11,16 @@ use crate::{
 #[cfg(any(test))]
 use std::ops::Index;
 
-/// A Merkle Tree.
-#[derive(Debug, Serialize, Deserialize)]
-pub struct MerkleTree<T: Copy + Sized, H: Default + MerkleTreeHasher<T>> {
+/// A Merkle Tree implementation which uses levels for non-leaf nodes.
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct MerkleTree<T: Copy + Sized, H: MerkleTreeHasher<T>> {
     num_leaves: usize,
     pub(crate) tree: Vec<T>,
     hash_name: String,
     _dummy: PhantomData<H>,
 }
 
-impl<T: AsRef<[u8]> + Copy, H: Copy + Default + MerkleTreeHasher<T>> MerkleTree<T, H> {
+impl<T: AsRef<[u8]> + Copy, H: Default + MerkleTreeHasher<T>> MerkleTree<T, H> {
     /// Builds a [MerkleTree] from leaves of type T and a [MerkleTreeHasher] of type H.
     pub fn build(leaves: &[T]) -> Result<MerkleTree<T, H>> {
         let num_leaves = leaves.len();
@@ -118,7 +118,6 @@ impl<T: AsRef<[u8]> + Copy, H: Copy + Default + MerkleTreeHasher<T>> MerkleTree<
         Ok(merkle_tree)
     }
 
-    ///  Builds a Merkle Proof for the leaf_index.
     pub fn build_proof(&self, leaf_index: usize) -> Result<MerkleProof<T, H>> {
         let mut actual_level_count = self.num_leaves;
 
@@ -186,18 +185,18 @@ impl<T: AsRef<[u8]> + Copy, H: Copy + Default + MerkleTreeHasher<T>> MerkleTree<
     }
 }
 
+impl<T: Copy, H: Default + MerkleTreeHasher<T>> Empty for MerkleTree<T, H> {
+    fn is_empty(&self) -> bool {
+        self.tree.is_empty()
+    }
+}
+
 /// Only implemented in 'test' configuration.
 #[cfg(any(test))]
 impl<T: Copy + ?Sized, H: Default + MerkleTreeHasher<T>> Index<usize> for MerkleTree<T, H> {
     type Output = T;
     fn index(&self, index: usize) -> &T {
         &self.tree[index]
-    }
-}
-
-impl<T: Copy, H: Default + MerkleTreeHasher<T>> Empty for MerkleTree<T, H> {
-    fn is_empty(&self) -> bool {
-        self.tree.is_empty()
     }
 }
 

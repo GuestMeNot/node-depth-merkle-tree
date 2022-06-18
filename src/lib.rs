@@ -34,17 +34,15 @@ mod merkle_tree;
 mod merkle_tree_hasher;
 mod sha256_merkle_tree_hasher;
 #[cfg(test)]
-mod test_merkle_proof;
-#[cfg(test)]
 mod test_blake3_merkle_tree;
 #[cfg(test)]
 mod test_keccak256_merkle_tree;
 #[cfg(test)]
 mod test_md5_merkle_tree;
 #[cfg(test)]
+mod test_merkle_proof;
+#[cfg(test)]
 mod test_merkle_tree_generic;
 #[cfg(test)]
 mod test_sha256_merkle_tree;
 mod utils;
-
-

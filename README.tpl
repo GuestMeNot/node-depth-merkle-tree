@@ -45,7 +45,7 @@ Current version: {{version}}
  let items = vec![item1, item2];
 
  // Build the Merkle Tree using SHA-256 and get the root.
- let tree = Sha256MerkleTree::build(&items).unwrap();
+ let tree = Sha256MerkleTree::new(&items).unwrap();
  let _root = tree.root();
  ```
 
@@ -76,7 +76,7 @@ Current version: {{version}}
  let items = vec![item1, item2];
 
  // Build the Merkle Tree using Blake3 and get the root.
- let tree = Blake3MerkleTree::build(&items).unwrap();
+ let tree = Blake3MerkleTree::new(&items).unwrap();
  let _root = tree.root();
  ```
 

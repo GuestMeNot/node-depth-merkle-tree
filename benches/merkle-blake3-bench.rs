@@ -78,7 +78,7 @@ mod tests {
     fn bench_blake3_node_depth_merkle_tree(bencher: &mut Bencher) {
         // hash the leaves first.
         let leaves = blake3_hash_leaf_values(&SINGLE_CHAR_VALUES);
-        bencher.iter(|| BlakeMerkleTree::build(&leaves));
+        bencher.iter(|| BlakeMerkleTree::new(&leaves));
     }
 
     #[bench]

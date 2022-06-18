@@ -11,11 +11,9 @@ use crate::MerkleTreeHasher;
 #[cfg(any(test))]
 use crate::utils::hash_values;
 
-
 /// Create a [MerkleTree] using [Sha256MerkleTreeHasher]. Enabled using the 'sha256_hash' feature.
 #[cfg(any(feature = "sha256_hash", test, bench))]
 pub type Sha256MerkleTree = MerkleTree<[u8; 32], Sha256MerkleTreeHasher>;
-
 
 /// Hasher for a Merkle Tree using SHA-256 Hashing. Enabled using the 'sha256_hash' feature.
 ///

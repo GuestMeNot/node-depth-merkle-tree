@@ -14,7 +14,6 @@ rustc-serialize = "0.3.24" # Needed for rustdoc code
 ## By default we enable the `sha-256` feature.
 default = [ "sha256_hash"]
 
-
 #! The following feature is experimental
 ## Enable creation of a Merkle Tree using Blake3 hashing.
 ##

@@ -13,11 +13,9 @@ use crate::MerkleTreeHasher;
 #[cfg(any(test))]
 use crate::utils::hash_values;
 
-
 /// Create a [MerkleTree] using [Keccak256MerkleTreeHasher]. Enabled using the 'keccak256_hash' feature.
 #[cfg(any(feature = "keccak256_hash", test, bench))]
 pub type Keccak256MerkleTree = MerkleTree<[u8; 32], Keccak256MerkleTreeHasher>;
-
 
 /// Hasher for a Merkle Tree using Keccak-256 Hashing. Enabled using the 'keccak256_hash' feature.
 ///

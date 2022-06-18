@@ -3,14 +3,11 @@ mod tests {
 
     use crate::blake3_merkle_tree_hasher::{blake3_hash_leaf_values, Blake3MerkleTreeHasher};
     use crate::test_merkle_tree_generic::{
-        merkle_root_calculation_test,
-        merkle_size_test,
-        merkle_test_repeatable_values,
-        merkle_tree_serde_failed_test,
-        merkle_tree_serde_test,
+        merkle_root_calculation_test, merkle_size_test, merkle_test_repeatable_values,
+        merkle_tree_serde_failed_test, merkle_tree_serde_test,
         thwart_second_image_attack_using_duplicate_odd_node,
         thwart_second_image_attack_using_interior_nodes,
-        thwart_second_image_attack_using_root_node
+        thwart_second_image_attack_using_root_node,
     };
 
     type ValueType = [u8; 32];
@@ -39,7 +36,7 @@ mod tests {
     fn blake3_merkle_root_calculation_test() {
         merkle_root_calculation_test::<ValueType, TestMerkleTreeHasher>(
             &HASH_VALUES_FN,
-            "edd5d4b7c614215ae12bbe871e2cf2f5f76747d3789f8809dc545c2cf45e4867"
+            "edd5d4b7c614215ae12bbe871e2cf2f5f76747d3789f8809dc545c2cf45e4867",
         );
     }
 
@@ -50,17 +47,22 @@ mod tests {
 
     #[test]
     fn blake3_thwart_second_image_attack_using_interior_nodes() {
-        thwart_second_image_attack_using_interior_nodes::<ValueType, TestMerkleTreeHasher>(&HASH_VALUES_FN);
+        thwart_second_image_attack_using_interior_nodes::<ValueType, TestMerkleTreeHasher>(
+            &HASH_VALUES_FN,
+        );
     }
 
     #[test]
     fn blake3_thwart_second_image_attack_using_root_node() {
-        thwart_second_image_attack_using_root_node::<ValueType, TestMerkleTreeHasher>(&HASH_VALUES_FN);
+        thwart_second_image_attack_using_root_node::<ValueType, TestMerkleTreeHasher>(
+            &HASH_VALUES_FN,
+        );
     }
 
     #[test]
     fn blake3_thwart_second_image_attack_using_duplicate_odd_node() {
-        thwart_second_image_attack_using_duplicate_odd_node::<ValueType, TestMerkleTreeHasher>(&HASH_VALUES_FN);
+        thwart_second_image_attack_using_duplicate_odd_node::<ValueType, TestMerkleTreeHasher>(
+            &HASH_VALUES_FN,
+        );
     }
-
 }

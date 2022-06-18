@@ -10,13 +10,11 @@ use crate::MerkleTreeHasher;
 #[cfg(any(test))]
 use crate::utils::hash_values;
 
-
 /// Create a [MerkleTree] using [MD5MerkleTreeHasher].
 ///
 /// Enabled using the 'md5_hash' feature.
 #[cfg(any(feature = "md5_hash", test, bench))]
 pub type Md5MerkleTree = MerkleTree<[u8; 16], Md5MerkleTreeHasher>;
-
 
 /// Hash using MD5. Enabled using the 'md5_hash' feature.
 ///

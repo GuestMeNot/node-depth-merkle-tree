@@ -1,4 +1,5 @@
 use std::marker::PhantomData;
+use std::slice::Iter;
 
 use anyhow::Result;
 use len_trait::{Empty, Len};
@@ -20,19 +21,21 @@ pub struct MerkleTree<T: Copy + Sized, H: MerkleTreeHasher<T>> {
     _dummy: PhantomData<H>,
 }
 
-impl<T: AsRef<[u8]> + Copy, H: Default + MerkleTreeHasher<T>> MerkleTree<T, H> {
-    /// Builds a [MerkleTree] from leaves of type T and a [MerkleTreeHasher] of type H.
-    pub fn build(leaves: &[T]) -> Result<MerkleTree<T, H>> {
+impl<'a, T: 'a + AsRef<[u8]> + Copy, H: Default + MerkleTreeHasher<T>> MerkleTree<T, H> {
+    /// Builds a MerkleTree from leaves of type T and a [MerkleTreeHasher] of type H.
+    pub fn new(leaves: &[T]) -> Result<MerkleTree<T, H>> {
+        let itr = leaves.iter();
+        <MerkleTree<T, H>>::new_from_itr(itr)
+    }
+
+    /// Builds a MerkleTree from a leaf [Iter] of type T and a [MerkleTreeHasher] of type H.
+    pub fn new_from_itr(leaves: Iter<T>) -> Result<MerkleTree<T, H>> {
         let num_leaves = leaves.len();
         let exact_node_count = count_tree_nodes(num_leaves);
-
         let hash_mgr = H::default();
-        let interior_node_starting_prefix =
-            <H as MerkleTreeHasher<T>>::non_leaf_node_starting_prefix();
-        let wrap_to_value = <H as MerkleTreeHasher<T>>::wrap_to_value();
 
-        // Interestingly creating the MerkleTree near the end of this function dramatically
-        // reduces performance. This appears to be due to copying the tree.
+        // Creating the MerkleTree near the end of this function reduces performance.
+        // This appears to be due to copying the tree.
         let mut merkle_tree = MerkleTree {
             num_leaves,
             tree: Vec::with_capacity(exact_node_count),
@@ -41,15 +44,16 @@ impl<T: AsRef<[u8]> + Copy, H: Default + MerkleTreeHasher<T>> MerkleTree<T, H> {
         };
 
         for leaf in leaves {
-            // Interestingly splitting the creation of leaf_hash_value into a separate function
-            // dramatically degrades performance, even despite using #[inline(always)]
-            let leaf_hash_value = <H as MerkleTreeHasher<T>>::hash_leaf(leaf);
-
-            merkle_tree.tree.push(leaf_hash_value);
+            merkle_tree
+                .tree
+                .push(<H as MerkleTreeHasher<T>>::hash_leaf(leaf));
         }
 
+        let wrap_to_value = <H as MerkleTreeHasher<T>>::wrap_to_value();
+
         // Prefixes are added to thwart Merkle Tree Second Preimage Attacks
-        let mut interior_node_level_prefix: [u8; 1] = interior_node_starting_prefix;
+        let mut interior_node_level_prefix: [u8; 1] =
+            <H as MerkleTreeHasher<T>>::non_leaf_node_starting_prefix();
 
         let mut actual_level_count = num_leaves;
         let mut actual_level_count_idx = actual_level_count - 1;

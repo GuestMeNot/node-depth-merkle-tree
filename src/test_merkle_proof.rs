@@ -9,7 +9,7 @@ mod tests {
     #[test]
     fn blake3_merkle_proof_test() {
         let leaves = blake3_hash_leaf_values(&SINGLE_CHAR_VALUES);
-        let tree = BlakeMerkleTree::build(&leaves).unwrap();
+        let tree = BlakeMerkleTree::new(&leaves).unwrap();
         for idx in 0..leaves.len() {
             let proof = tree.build_proof(idx).unwrap();
             let valid = proof.validate_proof(&leaves.as_slice()[idx]);
@@ -19,7 +19,7 @@ mod tests {
 
     #[test]
     fn blake3_merkle_proof_repeatable_test() {
-        let tree = BlakeMerkleTree::build(&blake3_hash_leaf_values(&SINGLE_CHAR_VALUES)).unwrap();
+        let tree = BlakeMerkleTree::new(&blake3_hash_leaf_values(&SINGLE_CHAR_VALUES)).unwrap();
         for idx in 0..SINGLE_CHAR_VALUES.len() {
             let proof1 = tree.build_proof(idx).unwrap();
             let proof2 = tree.build_proof(idx).unwrap();
@@ -29,7 +29,7 @@ mod tests {
 
     #[test]
     fn blake3_merkle_proof_failure_test() {
-        let tree = BlakeMerkleTree::build(&blake3_hash_leaf_values(&SINGLE_CHAR_VALUES)).unwrap();
+        let tree = BlakeMerkleTree::new(&blake3_hash_leaf_values(&SINGLE_CHAR_VALUES)).unwrap();
         for idx in 0..SINGLE_CHAR_VALUES.len() {
             let proof = tree.build_proof(idx).unwrap();
             assert!(!proof.validate_proof(&tree.root()));
@@ -38,7 +38,7 @@ mod tests {
 
     #[test]
     fn blake3_merkle_proof_serde_test() {
-        let tree = BlakeMerkleTree::build(&blake3_hash_leaf_values(&SINGLE_CHAR_VALUES)).unwrap();
+        let tree = BlakeMerkleTree::new(&blake3_hash_leaf_values(&SINGLE_CHAR_VALUES)).unwrap();
         for idx in 0..SINGLE_CHAR_VALUES.len() {
             let proof = tree.build_proof(idx).unwrap();
             let json = serde_json::to_string(&proof).unwrap();

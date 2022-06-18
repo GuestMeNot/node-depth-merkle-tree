@@ -146,38 +146,37 @@ Current version: {{version}}
 
  Simplified benchmarking showed that while generating hash for each level:
 
-   1. Functional programming significantly slowed Merkle Tree generation.
-       Collecting the intermediate hashes into a Vec and then adding to the tree slowed things down.
+   1. Collecting the intermediate hashes into a Vec and then adding to the tree slowed things down.
 
-   2. Rayon's par_iter() slowed generation of merkle tree hashes:
+   2. Naive usage of Rayon's par_iter() slowed generation of merkle tree hashes:
        <https://docs.rs/rayon/0.6.0/rayon/par_iter/index.html>
 
-   3. Updating Hashers incrementally, is generally faster than concatenating bytes before hashing.
-      Likewise creating a \[\[u8; xx\]\] array and passing the values one \[u8; xx\] at a time is also slow.
-      Either way, this is a calling code decision.
+   3. Updating Hashers incrementally is faster than concatenating bytes before hashing.
+      Likewise, creating a \[\[u8; xx\]\] array and passing the values one \[u8; xx\] at a time is also slow.
 
  ### Build commands
 
- Install and Run Cargo Readme
+ Install and Run cargo-readme
 
     cargo install cargo-readme
     cargo readme > README.md
 
- Create the rustdocs:
+ Run the tests
 
-    cargo rustdoc  --all-targets --all-features
+     cargo test
 
  Run the Benchmarks:
 
     cargo bench --all-features
 
-  Run the tests
-
-     cargo test
-
-  Run fmt
+ Run fmt
 
      cargo fmt --all -- --check
+
+ Create the rustdocs:
+
+    cargo rustdoc  --all-targets --all-features
+
 
 
  ### Upcoming Goals:

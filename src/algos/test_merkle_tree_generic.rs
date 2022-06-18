@@ -4,7 +4,8 @@ use serde::de::DeserializeOwned;
 use serde::Serialize;
 use std::fmt::Debug;
 
-use crate::{MerkleTree, MerkleTreeHasher};
+use crate::merkle_tree::MerkleTree;
+use crate::merkle_tree_hasher::MerkleTreeHasher;
 
 const SINGLE_CHAR_VALUES: [&str; 6] = ["a", "b", "c", "d", "e", "f"];
 const SINGLE_CHAR_VALUES_DUP_LAST_NODE: [&str; 7] = ["a", "b", "c", "d", "e", "f", "f"];

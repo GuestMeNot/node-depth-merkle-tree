@@ -2,12 +2,12 @@
 use crate::merkle_tree_hasher::LEAF_PREFIX;
 
 #[cfg(any(feature = "blake3_hash", test, bench))]
-use crate::MerkleTree;
+use crate::merkle_tree::MerkleTree;
 
 #[cfg(any(feature = "blake3_hash", test, bench))]
-use crate::MerkleTreeHasher;
+use crate::merkle_tree_hasher::MerkleTreeHasher;
 
-#[cfg(any(test))]
+#[cfg(any(feature = "blake3_hash", test))]
 use crate::utils::hash_values;
 
 /// Create a [MerkleTree] using [Blake3MerkleTreeHasher].
@@ -50,15 +50,15 @@ impl MerkleTreeHasher<[u8; 32]> for Blake3MerkleTreeHasher {
 }
 
 /// Convenience function used for testing to create Blake3 hashes from strs.
-#[cfg(any(test))]
+#[cfg(any(feature = "blake3_hash", test))]
 #[doc(hidden)]
 #[inline(always)]
-pub(crate) fn blake3_hash_leaf_values(values: &[&str]) -> Vec<[u8; 32]> {
+pub fn blake3_hash_leaf_values(values: &[&str]) -> Vec<[u8; 32]> {
     hash_values(values, blake3_hash_into_bytes)
 }
 
 /// Convenience function used for testing to create Blake3 hashes.
-#[cfg(any(test))]
+#[cfg(any(feature = "blake3_hash", test))]
 #[doc(hidden)]
 #[inline(always)]
 fn blake3_hash_into_bytes(value: &[u8]) -> [u8; 32] {

@@ -2,11 +2,12 @@
 use ring::digest::{Context, SHA256};
 
 #[cfg(any(feature = "sha256_hash", test, bench))]
+use crate::merkle_tree::MerkleTree;
+#[cfg(any(feature = "sha256_hash", test, bench))]
 use crate::merkle_tree_hasher::LEAF_PREFIX;
-use crate::MerkleTree;
 
 #[cfg(any(feature = "sha256_hash", test, bench))]
-use crate::MerkleTreeHasher;
+use crate::merkle_tree_hasher::MerkleTreeHasher;
 
 #[cfg(any(test))]
 use crate::utils::hash_values;

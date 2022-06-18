@@ -5,10 +5,10 @@ use ring::digest::{Context, SHA256};
 use crate::merkle_tree_hasher::LEAF_PREFIX;
 
 #[cfg(any(feature = "keccak256_hash", test, bench))]
-use crate::MerkleTree;
+use crate::merkle_tree::MerkleTree;
 
 #[cfg(any(feature = "keccak256_hash", test, bench))]
-use crate::MerkleTreeHasher;
+use crate::merkle_tree_hasher::MerkleTreeHasher;
 
 #[cfg(any(test))]
 use crate::utils::hash_values;

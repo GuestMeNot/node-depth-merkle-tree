@@ -2,7 +2,8 @@ use std::marker::PhantomData;
 
 use serde::{Deserialize, Serialize};
 
-use crate::{increment_or_wrap_around, is_odd, MerkleTreeHasher};
+use crate::merkle_tree_hasher::MerkleTreeHasher;
+use crate::{increment_or_wrap_around, is_odd};
 
 /// Holds data needed for a Merkle Proof for a given index.
 /// The Merkle Proof is created by [`MerkleTree.build_proof`](crate.MerkleTree.build_proof())

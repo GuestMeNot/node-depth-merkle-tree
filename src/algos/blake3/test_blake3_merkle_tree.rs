@@ -1,8 +1,7 @@
 #[cfg(test)]
 mod tests {
-
-    use crate::blake3_merkle_tree_hasher::{blake3_hash_leaf_values, Blake3MerkleTreeHasher};
-    use crate::test_merkle_tree_generic::{
+    use crate::algos::{blake3_hash_leaf_values, Blake3MerkleTreeHasher};
+    use crate::algos::test_merkle_tree_generic::{
         merkle_root_calculation_test, merkle_size_test, merkle_test_repeatable_values,
         merkle_tree_serde_failed_test, merkle_tree_serde_test,
         thwart_second_image_attack_using_duplicate_odd_node,

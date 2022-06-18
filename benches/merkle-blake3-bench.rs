@@ -2,11 +2,14 @@
 
 extern crate test;
 
-/// Run this Benchmark as using:
+/// Run these Benchmarks using:
+///
+///      cargo bench --features="blake3_hash"
+///
+/// or
 ///
 ///      cargo bench --all-features
 ///
-/// To run these benchmarks the command line is: cargo bench --features="blake3_hash"
 #[cfg(test)]
 mod tests {
 
@@ -16,6 +19,7 @@ mod tests {
     use rustc_serialize::hex::ToHex;
     use test::Bencher;
 
+    use node_depth_merkle_tree::blake3_hash_leaf_values;
     use node_depth_merkle_tree::BlakeMerkleTree;
 
     #[derive(Clone)]
@@ -103,28 +107,5 @@ mod tests {
         MerkleTree::<[u8; 32], Blake3MerkleLiteAlgorithm>::from_iter(leaves.to_owned())
             .root()
             .to_hex()
-    }
-
-    fn blake3_hash_leaf_values(values: &[&str]) -> Vec<[u8; 32]> {
-        hash_values(values, blake3_hash_into_bytes)
-    }
-
-    fn hash_values<T, H>(values: &[&str], hash_fn: H) -> Vec<T>
-    where
-        T: Clone + AsRef<[u8]>,
-        H: Fn(&[u8]) -> T,
-    {
-        let mut hashes: Vec<T> = Vec::with_capacity(values.len());
-        for value in values {
-            let hash = hash_fn(value.as_bytes());
-            hashes.push(hash);
-        }
-        hashes
-    }
-
-    fn blake3_hash_into_bytes(value: &[u8]) -> [u8; 32] {
-        let mut hasher = blake3::Hasher::new();
-        hasher.update(value);
-        hasher.finalize().as_bytes().to_owned()
     }
 }

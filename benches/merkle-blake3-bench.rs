@@ -19,7 +19,6 @@ mod tests {
     use rustc_serialize::hex::ToHex;
     use test::Bencher;
 
-    use node_depth_merkle_tree::blake3_hash_leaf_values;
     use node_depth_merkle_tree::BlakeMerkleTree;
 
     #[derive(Clone)]
@@ -76,27 +75,38 @@ mod tests {
 
     impl Blake3MerkleLiteAlgorithm {}
 
-    const SINGLE_CHAR_VALUES: [&str; 6] = ["a", "b", "c", "d", "e", "f"];
+    const LEN: usize = 10;
 
     #[bench]
     fn bench_blake3_node_depth_merkle_tree(bencher: &mut Bencher) {
         // hash the leaves first.
-        let leaves = blake3_hash_leaf_values(&SINGLE_CHAR_VALUES);
+        let leaves = gen_blake3_values("a", LEN);
         bencher.iter(|| BlakeMerkleTree::new(&leaves));
     }
 
     #[bench]
     fn bench_blake3_rs_merkle(bencher: &mut Bencher) {
         // hash the leaves first.
-        let leaves = blake3_hash_leaf_values(&SINGLE_CHAR_VALUES);
+        let leaves = gen_blake3_values("a", LEN);
         bencher.iter(|| blake3_rs_merkle(&leaves));
     }
 
     #[bench]
     fn bench_blake3_merkle_light(bencher: &mut Bencher) {
         // hash the leaves first.
-        let leaves = blake3_hash_leaf_values(&SINGLE_CHAR_VALUES);
+        let leaves = gen_blake3_values("a", LEN);
         bencher.iter(|| blake3_merkle_light(&leaves));
+    }
+
+    fn gen_blake3_values(seed: &str, len: usize) -> Vec<[u8; 32]> {
+        let mut bytes = seed.as_bytes();
+        let mut v = Vec::with_capacity(len);
+        for _i in 0..len {
+            let val = blake3::hash(bytes).as_bytes().to_owned();
+            v.push(val);
+            bytes = v.last().unwrap().as_ref();
+        }
+        v
     }
 
     fn blake3_rs_merkle(leaves: &Vec<[u8; 32]>) -> Option<String> {

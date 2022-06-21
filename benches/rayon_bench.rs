@@ -19,6 +19,10 @@ mod tests {
 
     /// This bench shows that around 500 to 1000 iterations that
     /// rayon par_iter() increases performance.
+    ///
+    /// **NOTE**: Naively adding par_iter() to the working merkle tree code did not improve performance.
+    /// Hashing merkle tree leaves in parallel was much worse in performance compared to
+    /// single threading.
     #[bench]
     fn bench_blake3_par(bencher: &mut Bencher) {
         let values = gen_blake3_values("a", LEN);

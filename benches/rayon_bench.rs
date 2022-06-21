@@ -10,18 +10,24 @@ mod tests {
 
     const LEN: usize = 1000;
 
+    /// This single threaded bench is used for comparison with multi-threaded options.
     #[bench]
     fn bench_blake3(bencher: &mut Bencher) {
         let values = gen_blake3_values("a", LEN);
         bencher.iter(|| hash_blake3(&values));
     }
 
+    /// This bench shows that around 500 to 1000 iterations that
+    /// rayon par_iter() increases performance.
     #[bench]
     fn bench_blake3_par(bencher: &mut Bencher) {
         let values = gen_blake3_values("a", LEN);
         bencher.iter(|| hash_blake3_par(&values));
     }
 
+    /// This bench shows that at around 500 to 1000 iterations that
+    /// there is no performance improvement gained by using for rayon::spawn
+    /// vs using a single thread.
     #[bench]
     fn bench_blake3_spawn(bencher: &mut Bencher) {
         let values = gen_blake3_values("a", LEN);

@@ -190,3 +190,5 @@ Current version: {{version}}
       A natural approach would be to calculate hashes at each tree level concurrently.
       This could be added as a feature to allow existing code to opt out as needed.
 
+      See: `benches\rayon_bench.rs` for more details.
+

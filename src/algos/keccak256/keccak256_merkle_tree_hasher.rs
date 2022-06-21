@@ -1,30 +1,30 @@
-#[cfg(any(feature = "keccak256_hash", test, bench))]
+#[cfg(any(feature = "keccak256_hash", test))]
 use ring::digest::{Context, SHA256};
 
-#[cfg(any(feature = "keccak256_hash", test, bench))]
+#[cfg(any(feature = "keccak256_hash", test))]
 use crate::merkle_tree_hasher::LEAF_PREFIX;
 
-#[cfg(any(feature = "keccak256_hash", test, bench))]
+#[cfg(any(feature = "keccak256_hash", test))]
 use crate::merkle_tree::MerkleTree;
 
-#[cfg(any(feature = "keccak256_hash", test, bench))]
+#[cfg(any(feature = "keccak256_hash", test))]
 use crate::merkle_tree_hasher::MerkleTreeHasher;
 
 #[cfg(any(test))]
 use crate::utils::hash_values;
 
 /// Create a [MerkleTree] using [Keccak256MerkleTreeHasher]. Enabled using the 'keccak256_hash' feature.
-#[cfg(any(feature = "keccak256_hash", test, bench))]
+#[cfg(any(feature = "keccak256_hash", test))]
 pub type Keccak256MerkleTree = MerkleTree<[u8; 32], Keccak256MerkleTreeHasher>;
 
 /// Hasher for a Merkle Tree using Keccak-256 Hashing. Enabled using the 'keccak256_hash' feature.
 ///
 /// This [MerkleTreeHasher] will behave as expected in a multi-threaded environment.
-#[cfg(any(feature = "keccak256_hash", test, bench))]
+#[cfg(any(feature = "keccak256_hash", test))]
 #[derive(Clone, Copy, Debug, Default)]
 pub struct Keccak256MerkleTreeHasher {}
 
-#[cfg(any(feature = "keccak256_hash", test, bench))]
+#[cfg(any(feature = "keccak256_hash", test))]
 impl MerkleTreeHasher<[u8; 32]> for Keccak256MerkleTreeHasher {
     fn name(&self) -> String {
         "SHA-256".to_string()

@@ -1,10 +1,10 @@
-#[cfg(any(feature = "blake3_hash", test, bench))]
+#[cfg(any(feature = "blake3_hash", test))]
 use crate::merkle_tree_hasher::LEAF_PREFIX;
 
-#[cfg(any(feature = "blake3_hash", test, bench))]
+#[cfg(any(feature = "blake3_hash", test))]
 use crate::merkle_tree::MerkleTree;
 
-#[cfg(any(feature = "blake3_hash", test, bench))]
+#[cfg(any(feature = "blake3_hash", test))]
 use crate::merkle_tree_hasher::MerkleTreeHasher;
 
 #[cfg(any(feature = "blake3_hash", test))]
@@ -13,7 +13,7 @@ use crate::utils::hash_values;
 /// Create a [MerkleTree] using [Blake3MerkleTreeHasher].
 ///
 /// Enabled using the 'blake3_hash' feature.
-#[cfg(any(feature = "blake3_hash", test, bench))]
+#[cfg(any(feature = "blake3_hash", test))]
 pub type BlakeMerkleTree = MerkleTree<[u8; 32], Blake3MerkleTreeHasher>;
 
 /// Hash using [`blake3::Hasher`](blake3::Hasher). Enabled using the 'blake3_hash' feature.
@@ -23,11 +23,11 @@ pub type BlakeMerkleTree = MerkleTree<[u8; 32], Blake3MerkleTreeHasher>;
 /// increases the difficultly of achieving for 51% attacks.
 ///
 /// This [MerkleTreeHasher] will behave as expected in a multi-threaded environment.
-#[cfg(any(feature = "blake3_hash", test, bench))]
+#[cfg(any(feature = "blake3_hash", test))]
 #[derive(Clone, Copy, Debug, Default)]
 pub struct Blake3MerkleTreeHasher {}
 
-#[cfg(any(feature = "blake3_hash", test, bench))]
+#[cfg(any(feature = "blake3_hash", test))]
 impl MerkleTreeHasher<[u8; 32]> for Blake3MerkleTreeHasher {
     fn name(&self) -> String {
         "Blake3".to_string()

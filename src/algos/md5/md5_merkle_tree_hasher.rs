@@ -1,10 +1,10 @@
-#[cfg(any(feature = "md5_hash", test, bench))]
+#[cfg(any(feature = "md5_hash", test))]
 use crate::merkle_tree_hasher::LEAF_PREFIX;
 
-#[cfg(any(feature = "md5_hash", test, bench))]
+#[cfg(any(feature = "md5_hash", test))]
 use crate::merkle_tree::MerkleTree;
 
-#[cfg(any(feature = "md5_hash", test, bench))]
+#[cfg(any(feature = "md5_hash", test))]
 use crate::merkle_tree_hasher::MerkleTreeHasher;
 
 #[cfg(any(test))]
@@ -19,11 +19,11 @@ pub type Md5MerkleTree = MerkleTree<[u8; 16], Md5MerkleTreeHasher>;
 /// Hash using MD5. Enabled using the 'md5_hash' feature.
 ///
 /// This [MerkleTreeHasher] will behave as expected in a multi-threaded environment.
-#[cfg(any(feature = "md5_hash", test, bench))]
+#[cfg(any(feature = "md5_hash", test))]
 #[derive(Debug, Default, Copy, Clone)]
 pub struct Md5MerkleTreeHasher {}
 
-#[cfg(any(feature = "md5_hash", test, bench))]
+#[cfg(any(feature = "md5_hash", test))]
 impl MerkleTreeHasher<[u8; 16]> for Md5MerkleTreeHasher {
     fn name(&self) -> String {
         "MD5".to_string()

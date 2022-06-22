@@ -72,8 +72,7 @@ mod tests {
     ///              .collect();
     ///           v.sort_by(|tuple1, tuple2| tuple1.0.cmp(&tuple2.0));
     ///           v.iter()
-    ///              .map(|tuple| tuple.1)
-    ///             .collect_into_vec(&mut merkle_tree.tree);
+    ///              .for_each(|tuple| &mut merkle_tree.tree.push(tuple.1));
     ///         }
     ///
     /// 5. Implement `IntoParallelRefIterator` as outlined below. It is unclear how this approach

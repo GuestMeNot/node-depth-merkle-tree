@@ -39,6 +39,10 @@ md5_hash = [ "md5" ]
 ## and `Sha256MerkleTreeHasher`.
 sha256_hash = ["ring", "digest"]
 
+## Enable parallel processing of hashes.
+## Beware! This is an experimental feature!
+parallel_hashing = [ "rayon" ]
+
 
 [dependencies.blake3]
 version = "1.2.0"
@@ -60,6 +64,10 @@ optional = true
 version = "0.10.1"
 optional = true
 
+[dependencies.rayon]
+version = "1.5.3"
+optional = true
+
 [dev-dependencies]
 blake3 = "1.2.0"
 digest = "0.10.1"
@@ -74,5 +82,13 @@ sha2 = "0.10.2"
 sha3 = "0.10.1"
 
 [[bench]]
-name = "merkle-blake3-bench"
+name = "merkle_blake3_bench"
 required-features = ["blake3_hash"]
+
+[[bench]]
+name = "blake3_bench"
+required-features = ["blake3_hash"]
+
+[[bench]]
+name = "rayon_bench"
+required-features = ["blake3_hash", "parallel_hashing"]

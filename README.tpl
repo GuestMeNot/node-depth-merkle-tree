@@ -15,6 +15,8 @@ Current version: {{version}}
 
   **`sha256_hash`** - enables MerkleTree and MerkleProof creation using SHA-256.
 
+  **`parallel_hashing`** - enables parallel hashing. Beware! This is highly experimental!
+
 ### Examples
 
 

@@ -1,6 +1,5 @@
 #[cfg(test)]
 mod tests {
-    use crate::algos::{blake3_hash_leaf_values, Blake3MerkleTreeHasher};
     use crate::algos::test_merkle_tree_generic::{
         merkle_root_calculation_test, merkle_size_test, merkle_test_repeatable_values,
         merkle_tree_serde_failed_test, merkle_tree_serde_test,
@@ -8,6 +7,7 @@ mod tests {
         thwart_second_image_attack_using_interior_nodes,
         thwart_second_image_attack_using_root_node,
     };
+    use crate::algos::{blake3_hash_leaf_values, Blake3MerkleTreeHasher};
 
     type ValueType = [u8; 32];
     type TestMerkleTreeHasher = Blake3MerkleTreeHasher;

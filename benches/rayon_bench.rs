@@ -9,6 +9,7 @@ mod tests {
     use test::Bencher;
 
     const LEN: usize = 1000;
+    const RAYON_MIN_ITER_LEN: usize = 50;
 
     /// This single threaded bench is used for comparison with multi-threaded options.
     #[bench]
@@ -49,11 +50,11 @@ mod tests {
     ///         This approach seems prone to coding mistakes by callers.
     ///
     ///       - The caller could pass a sorting `Fn` to `MerkleTree::new`. This feels like an
-    ///         unreasonable burden to place on the caller. Since the indices do not match those
-    ///         passed in it still seems prone to coding mistakes by callers.
+    ///         unreasonable burden to place on the caller. Since the indices of the leaf hashes would
+    ///         not match those passed in, it still seems prone to coding mistakes by callers.
     ///
     ///      **b.** Collecting leaves an `Vec` from an `Iter` is slower than single threading for
-    ///         to hash 1000 leaves:
+    ///         to hash 1000 leaves. It appears there is too much memory copying.
     ///
     ///         fn add_leaves(merkle_tree: &mut MerkleTree<T, H>, leaves: Iter<T>) {
     ///           leaves.map(|leaf| leaf.clone()).collect::<Vec<T>>().par_iter()
@@ -62,7 +63,7 @@ mod tests {
     ///         }
     ///
     ///      **c.** Calling `Iter.enumerate()` before `par_bridge()` is slower than a single thread
-    ///         to hash 1000 leaves:
+    ///         to hash 1000 leaves. It appears there is too much memory copying and allocation.
     ///
     ///         fn add_leaves(merkle_tree: &mut MerkleTree<T, H>, leaves: Iter<T>) {
     ///           let mut v: Vec<(usize, T)> = leaves
@@ -71,12 +72,11 @@ mod tests {
     ///              .map(|leaf| (leaf.0, <H as MerkleTreeHasher<T>>::hash_leaf(leaf.1)))
     ///              .collect();
     ///           v.sort_by(|tuple1, tuple2| tuple1.0.cmp(&tuple2.0));
-    ///           v.iter()
-    ///              .for_each(|tuple| &mut merkle_tree.tree.push(tuple.1));
+    ///           v.iter().for_each(|tuple| &mut merkle_tree.tree.push(tuple.1));
     ///         }
     ///
-    /// 5. Implement `IntoParallelRefIterator` as outlined below. It is unclear how this approach
-    ///    would be faster than `par_bridge()` above.
+    /// 5. Implement `IntoParallelRefIterator` as outlined below. At first glance, it is unclear how
+    ///    this approach would be faster than `par_bridge()` above.
     ///
     ///    <https://stackoverflow.com/questions/35863996/cannot-use-rayons-par-iter#35869613>
     #[bench]
@@ -114,6 +114,7 @@ mod tests {
     fn hash_blake3_par<T: AsRef<[u8]> + Send + Sync>(values: &Vec<T>) {
         let _x: Vec<[u8; 32]> = values
             .par_iter()
+            .with_min_len(RAYON_MIN_ITER_LEN)
             .map(|value| hash(value.as_ref()))
             .collect();
     }

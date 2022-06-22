@@ -40,13 +40,9 @@ mod tests {
     ///    `par_bridge` does not keep the original ordering of the iterator. The indices of the
     ///    resulting hashes likely will not match the leaf indices before the call the to `par_bridge`.
     ///
-    ///    There are two possibilities to think about:
+    ///    There are several possibilities to think about:
     ///
-    ///      **a.** Calling `enumerate()` before `par_bridge()` (i.e. `iter.enumerate().par_bridge()`).
-    ///         This requires bookkeeping code to reorder the results to match the original
-    ///         leaf indices.
-    ///
-    ///      **b.** Requiring sorted leaves. There are additional design questions to consider for
+    ///      **a.** Requiring sorted leaves. There are additional design questions to consider for
     ///         this case:
     ///
     ///       - How would a naive caller know to sort the leaves prior to calling `MerkleTree::new`?
@@ -56,8 +52,29 @@ mod tests {
     ///         unreasonable burden to place on the caller. Since the indices do not match those
     ///         passed in it still seems prone to coding mistakes by callers.
     ///
-    /// 5. Implement `IntoParallelRefIterator` as outlined below appears to be the best approach
-    ///    so far:
+    ///      **b.** Collecting leaves an `Vec` from an `Iter` is slower than single threading for
+    ///         to hash 1000 leaves:
+    ///
+    ///         leaves.map(|leaf| leaf.clone()).collect::<Vec<T>>().par_iter()
+    ///             .map(|leaf| <H as MerkleTreeHasher<T>>::hash_leaf(leaf))
+    ///             .collect_into_vec(&mut merkle_tree.tree);
+    ///
+    ///      **c.** Calling `Iter.enumerate()` before `par_bridge()` is slower than a single thread
+    ///         to hash 1000 leaves:
+    ///
+    ///          let mut v: Vec<(usize, T)> = leaves
+    ///              .enumerate()
+    ///              .par_bridge()
+    ///              .map(|leaf| (leaf.0, <H as MerkleTreeHasher<T>>::hash_leaf(leaf.1)))
+    ///              .collect();
+    ///          v.sort_by(|tuple1, tuple2| tuple1.0.cmp(&tuple2.0));
+    ///          v.iter()
+    ///              .map(|tuple| tuple.1)
+    ///              .for_each(|leaf| merkle_tree.tree.push(leaf));
+    ///
+    ///
+    /// 5. Implement `IntoParallelRefIterator` as outlined below. It is unclear how this approach
+    ///    would be faster than `par_bridge()` above.
     ///
     ///    <https://stackoverflow.com/questions/35863996/cannot-use-rayons-par-iter#35869613>
     #[bench]

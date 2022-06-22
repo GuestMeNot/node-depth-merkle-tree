@@ -55,23 +55,26 @@ mod tests {
     ///      **b.** Collecting leaves an `Vec` from an `Iter` is slower than single threading for
     ///         to hash 1000 leaves:
     ///
-    ///         leaves.map(|leaf| leaf.clone()).collect::<Vec<T>>().par_iter()
+    ///         fn add_leaves(merkle_tree: &mut MerkleTree<T, H>, leaves: Iter<T>) {
+    ///           leaves.map(|leaf| leaf.clone()).collect::<Vec<T>>().par_iter()
     ///             .map(|leaf| <H as MerkleTreeHasher<T>>::hash_leaf(leaf))
     ///             .collect_into_vec(&mut merkle_tree.tree);
+    ///         }
     ///
     ///      **c.** Calling `Iter.enumerate()` before `par_bridge()` is slower than a single thread
     ///         to hash 1000 leaves:
     ///
-    ///          let mut v: Vec<(usize, T)> = leaves
+    ///         fn add_leaves(merkle_tree: &mut MerkleTree<T, H>, leaves: Iter<T>) {
+    ///           let mut v: Vec<(usize, T)> = leaves
     ///              .enumerate()
     ///              .par_bridge()
     ///              .map(|leaf| (leaf.0, <H as MerkleTreeHasher<T>>::hash_leaf(leaf.1)))
     ///              .collect();
-    ///          v.sort_by(|tuple1, tuple2| tuple1.0.cmp(&tuple2.0));
-    ///          v.iter()
+    ///           v.sort_by(|tuple1, tuple2| tuple1.0.cmp(&tuple2.0));
+    ///           v.iter()
     ///              .map(|tuple| tuple.1)
-    ///              .for_each(|leaf| merkle_tree.tree.push(leaf));
-    ///
+    ///             .collect_into_vec(&mut merkle_tree.tree);
+    ///         }
     ///
     /// 5. Implement `IntoParallelRefIterator` as outlined below. It is unclear how this approach
     ///    would be faster than `par_bridge()` above.

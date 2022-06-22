@@ -31,23 +31,17 @@ impl<'a, T: 'a + AsRef<[u8]> + Copy, H: Default + MerkleTreeHasher<T>> MerkleTre
     /// Builds a MerkleTree from a leaf [Iter] of type T and a [MerkleTreeHasher] of type H.
     pub fn new_from_itr(leaves: Iter<T>) -> Result<MerkleTree<T, H>> {
         let num_leaves = leaves.len();
-        let exact_node_count = count_tree_nodes(num_leaves);
-        let hash_mgr = H::default();
 
         // Creating the MerkleTree near the end of this function reduces performance.
         // This appears to be due to copying the tree.
         let mut merkle_tree = MerkleTree {
             num_leaves,
-            tree: Vec::with_capacity(exact_node_count),
-            hash_name: hash_mgr.name(),
+            tree: Vec::with_capacity(count_tree_nodes(num_leaves)),
+            hash_name: H::default().name(),
             _dummy: Default::default(),
         };
 
-        for leaf in leaves {
-            merkle_tree
-                .tree
-                .push(<H as MerkleTreeHasher<T>>::hash_leaf(leaf));
-        }
+        MerkleTree::<T, H>::add_leaves(&mut merkle_tree, leaves);
 
         let wrap_to_value = <H as MerkleTreeHasher<T>>::wrap_to_value();
 
@@ -120,6 +114,14 @@ impl<'a, T: 'a + AsRef<[u8]> + Copy, H: Default + MerkleTreeHasher<T>> MerkleTre
         }
 
         Ok(merkle_tree)
+    }
+
+    fn add_leaves(merkle_tree: &mut MerkleTree<T, H>, leaves: Iter<T>) {
+       for leaf in leaves {
+           merkle_tree
+               .tree
+               .push(<H as MerkleTreeHasher<T>>::hash_leaf(leaf));
+       }
     }
 
     pub fn build_proof(&self, leaf_index: usize) -> Result<MerkleProof<T, H>> {

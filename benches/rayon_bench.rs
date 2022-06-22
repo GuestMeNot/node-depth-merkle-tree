@@ -26,7 +26,10 @@ mod tests {
     ///    `Vec`s and fixed size arrays.
     ///
     /// 2. Changing `MerkleTree::new` parameter from slice and `Iter` to `&Vec`dramatically
-    ///    decreased performance when using Rayon's `par_iter()` to hash the leaves.
+    ///    decreased performance when using Rayon's `par_iter()` to hash the leaves. This
+    ///    appears to happen due to allocating the `Vec` on the heap.
+    ///
+    ///    <https://stackoverflow.com/questions/40006219/why-is-it-discouraged-to-accept-a-reference-to-a-string-string-vec-vec-o>
     ///
     /// 3. Since Rayon's `par_iter` will work with fixed sized arrays, we can change the `MerkleTree::new`
     ///    parameter to a generic `[T; N]` by adding a `const` generic parameter, but this requires
@@ -52,6 +55,11 @@ mod tests {
     ///       - The caller could pass a sorting `Fn` to `MerkleTree::new`. This feels like an
     ///         unreasonable burden to place on the caller. Since the indices do not match those
     ///         passed in it still seems prone to coding mistakes by callers.
+    ///
+    /// 5. Implement `IntoParallelRefIterator` as outlined below appears to be the best approach
+    ///    so far:
+    ///
+    ///    <https://stackoverflow.com/questions/35863996/cannot-use-rayons-par-iter#35869613>
     #[bench]
     fn bench_blake3_par(bencher: &mut Bencher) {
         let values = gen_blake3_values("a", LEN);

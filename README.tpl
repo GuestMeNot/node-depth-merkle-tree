@@ -177,14 +177,14 @@ Current version: {{version}}
 
     cargo rustdoc  --all-targets --all-features
 
-
-
  ### Upcoming Goals:
 
    1. Non-blocking - Play fairly with other activities on the machine.
       Hashing is a relatively expensive operation. Some folks recommend
-      releasing the thread after ~10ns. This could be added as a feature to
-      allow existing code to opt out as needed.
+      releasing the thread after "10 to 100 microseconds between each call to
+      `.await`". This could be added as a feature.
+
+      <https://ryhl.io/blog/async-what-is-blocking/>
 
    2. Concurrency - Code should work in parallel if feasible.
       A natural approach would be to calculate hashes at each tree level concurrently.

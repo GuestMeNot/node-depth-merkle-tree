@@ -14,7 +14,7 @@ const SINGLE_CHAR_VALUES_DUP_LAST_NODE: [&str; 7] = ["a", "b", "c", "d", "e", "f
 #[doc(hidden)]
 pub fn merkle_size_test<T, H>(hash: &dyn Fn(&[&str]) -> Vec<T>)
 where
-    T: AsRef<[u8]> + Copy + Sized,
+    T: AsRef<[u8]> + Copy + Sized + Ord + Send + Sync,
     H: Default + MerkleTreeHasher<T>,
 {
     let tree = MerkleTree::<T, H>::new(&hash(&SINGLE_CHAR_VALUES)).unwrap();
@@ -25,7 +25,16 @@ where
 #[doc(hidden)]
 pub(crate) fn merkle_tree_serde_test<T, H>(hash: &dyn Fn(&[&str]) -> Vec<T>)
 where
-    T: AsRef<[u8]> + Copy + Debug + DeserializeOwned + PartialEq + Serialize + Sized,
+    T: AsRef<[u8]>
+        + Copy
+        + Debug
+        + DeserializeOwned
+        + PartialEq
+        + Serialize
+        + Sized
+        + Ord
+        + Send
+        + Sync,
     H: Debug + Default + MerkleTreeHasher<T>,
 {
     let tree = MerkleTree::<T, H>::new(&hash(&SINGLE_CHAR_VALUES)).unwrap();
@@ -38,7 +47,16 @@ where
 #[doc(hidden)]
 pub(crate) fn merkle_tree_serde_failed_test<T, H>(hash: &dyn Fn(&[&str]) -> Vec<T>)
 where
-    T: AsRef<[u8]> + Copy + Debug + DeserializeOwned + PartialEq + Serialize + Sized,
+    T: AsRef<[u8]>
+        + Copy
+        + Debug
+        + DeserializeOwned
+        + PartialEq
+        + Serialize
+        + Sized
+        + Ord
+        + Send
+        + Sync,
     H: Clone + Debug + Default + MerkleTreeHasher<T>,
 {
     let tree1 = MerkleTree::<T, H>::new(&hash(&SINGLE_CHAR_VALUES)).unwrap();
@@ -61,7 +79,7 @@ pub(crate) fn merkle_root_calculation_test<T, H>(
     hash: &dyn Fn(&[&str]) -> Vec<T>,
     expected_root: &str,
 ) where
-    T: AsRef<[u8]> + Copy + Debug + PartialEq + Sized,
+    T: AsRef<[u8]> + Copy + Debug + PartialEq + Sized + Ord + Send + Sync,
     H: Default + MerkleTreeHasher<T>,
 {
     let tree = MerkleTree::<T, H>::new(&hash(&SINGLE_CHAR_VALUES)).unwrap();
@@ -74,7 +92,7 @@ pub(crate) fn merkle_root_calculation_test<T, H>(
 #[doc(hidden)]
 pub(crate) fn merkle_test_repeatable_values<T, H>(hash: &dyn Fn(&[&str]) -> Vec<T>)
 where
-    T: AsRef<[u8]> + Copy + Debug + PartialEq + Sized,
+    T: AsRef<[u8]> + Copy + Debug + PartialEq + Sized + Ord + Send + Sync,
     H: Debug + Default + MerkleTreeHasher<T>,
 {
     let tree1 = MerkleTree::<T, H>::new(&hash(&SINGLE_CHAR_VALUES)).unwrap();
@@ -88,7 +106,7 @@ where
 pub(crate) fn thwart_second_image_attack_using_interior_nodes<T, H>(
     hash: &dyn Fn(&[&str]) -> Vec<T>,
 ) where
-    T: AsRef<[u8]> + Copy + Debug + PartialEq + Sized,
+    T: AsRef<[u8]> + Copy + Debug + PartialEq + Sized + Ord + Send + Sync,
     H: Debug + Default + MerkleTreeHasher<T>,
 {
     let valid_tree = MerkleTree::<T, H>::new(&hash(&SINGLE_CHAR_VALUES)).unwrap();
@@ -106,7 +124,7 @@ pub(crate) fn thwart_second_image_attack_using_interior_nodes<T, H>(
 #[doc(hidden)]
 pub(crate) fn thwart_second_image_attack_using_root_node<T, H>(hash: &dyn Fn(&[&str]) -> Vec<T>)
 where
-    T: AsRef<[u8]> + Copy + Debug + PartialEq + Sized,
+    T: AsRef<[u8]> + Copy + Debug + PartialEq + Sized + Ord + Send + Sync,
     H: Debug + Default + MerkleTreeHasher<T>,
 {
     let valid_tree = MerkleTree::<T, H>::new(&hash(&SINGLE_CHAR_VALUES)).unwrap();
@@ -124,7 +142,7 @@ where
 pub(crate) fn thwart_second_image_attack_using_duplicate_odd_node<T, H>(
     hash: &dyn Fn(&[&str]) -> Vec<T>,
 ) where
-    T: AsRef<[u8]> + Copy + Debug + PartialEq + Sized,
+    T: AsRef<[u8]> + Copy + Debug + PartialEq + Sized + Ord + Send + Sync,
     H: Debug + Default + MerkleTreeHasher<T>,
 {
     let valid_tree = MerkleTree::<T, H>::new(&hash(&SINGLE_CHAR_VALUES)).unwrap();

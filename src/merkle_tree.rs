@@ -5,6 +5,9 @@ use anyhow::Result;
 use len_trait::{Empty, Len};
 use serde::{Deserialize, Serialize};
 
+#[cfg(any(feature = "parallel_hashing"))]
+use rayon::prelude::*;
+
 use crate::{
     add_1_if_odd, count_tree_nodes, increment_or_wrap_around, is_odd, MerkleProof, MerkleTreeHasher,
 };
@@ -21,7 +24,9 @@ pub struct MerkleTree<T: Copy + Sized, H: MerkleTreeHasher<T>> {
     _dummy: PhantomData<H>,
 }
 
-impl<'a, T: 'a + AsRef<[u8]> + Copy, H: Default + MerkleTreeHasher<T>> MerkleTree<T, H> {
+impl<'a, T: 'a + AsRef<[u8]> + Copy + Send + Sync, H: Default + MerkleTreeHasher<T>>
+    MerkleTree<T, H>
+{
     /// Builds a MerkleTree from leaves of type T and a [MerkleTreeHasher] of type H.
     pub fn new(leaves: &[T]) -> Result<MerkleTree<T, H>> {
         let itr = leaves.iter();
@@ -116,12 +121,24 @@ impl<'a, T: 'a + AsRef<[u8]> + Copy, H: Default + MerkleTreeHasher<T>> MerkleTre
         Ok(merkle_tree)
     }
 
+    #[cfg(not(any(feature = "parallel_hashing")))]
     fn add_leaves(merkle_tree: &mut MerkleTree<T, H>, leaves: Iter<T>) {
-       for leaf in leaves {
-           merkle_tree
-               .tree
-               .push(<H as MerkleTreeHasher<T>>::hash_leaf(leaf));
-       }
+        for leaf in leaves {
+            merkle_tree
+                .tree
+                .push(<H as MerkleTreeHasher<T>>::hash_leaf(leaf));
+        }
+    }
+
+    // This is not enabled for testing by default.
+    #[cfg(any(feature = "parallel_hashing"))]
+    fn add_leaves(merkle_tree: &mut MerkleTree<T, H>, leaves: Iter<T>) {
+        leaves
+            .map(|leaf| leaf.clone())
+            .collect::<Vec<T>>()
+            .par_iter()
+            .map(|leaf| <H as MerkleTreeHasher<T>>::hash_leaf(leaf))
+            .collect_into_vec(&mut merkle_tree.tree);
     }
 
     pub fn build_proof(&self, leaf_index: usize) -> Result<MerkleProof<T, H>> {
@@ -199,7 +216,9 @@ impl<T: Copy, H: Default + MerkleTreeHasher<T>> Empty for MerkleTree<T, H> {
 
 /// Only implemented in 'test' configuration.
 #[cfg(any(test))]
-impl<T: Copy + ?Sized, H: Default + MerkleTreeHasher<T>> Index<usize> for MerkleTree<T, H> {
+impl<T: Copy + Send + ?Sized + Sync, H: Default + MerkleTreeHasher<T>> Index<usize>
+    for MerkleTree<T, H>
+{
     type Output = T;
     fn index(&self, index: usize) -> &T {
         &self.tree[index]

@@ -41,6 +41,10 @@ sha256_hash = ["ring", "digest"]
 
 ## Enable parallel processing of hashes.
 ## Beware! This is an experimental feature!
+
+## `parallel_hashing` looks most promising for a higher number of cores and a large number of leaves.
+## It should be tested in your environment.
+
 parallel_hashing = [ "rayon" ]
 
 

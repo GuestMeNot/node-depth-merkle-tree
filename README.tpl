@@ -5,17 +5,19 @@ Current version: {{version}}
 
 {{readme}}
 
-  **`default`** - enables the **`sha256_hash`** feature.
+  **`default`** - Enables the **`sha256_hash`** feature.
 
-  **`blake3_hash`** - enables MerkleTree and MerkleProof creation using Blake3.
+  **`blake3_hash`** - Enables MerkleTree and MerkleProof creation using Blake3.
 
-  **`keccak256_hash`** - enables MerkleTree and MerkleProof creation using Keccak-256.
+  **`keccak256_hash`** - Enables MerkleTree and MerkleProof creation using Keccak-256.
 
-  **`md5_hash`** - enables MerkleTree and MerkleProof creation using MD5.
+  **`md5_hash`** - Enables MerkleTree and MerkleProof creation using MD5.
 
-  **`sha256_hash`** - enables MerkleTree and MerkleProof creation using SHA-256.
+  **`sha256_hash`** - Enables MerkleTree and MerkleProof creation using SHA-256.
 
-  **`parallel_hashing`** - enables parallel hashing. Beware! This is highly experimental!
+  **`parallel_hashing`** - Enables parallel hashing. This is highly experimental!
+        `parallel_hashing` looks most promising for a higher number of cores and a large number of leaves.
+        It should be tested in your environment.
 
 ### Examples
 

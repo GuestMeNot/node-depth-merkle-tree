@@ -36,6 +36,16 @@ mod tests {
     ///    parameter to a generic `[T; N]` by adding a `const` generic parameter, but this requires
     ///    the caller to know the exact number of leaves at compile time.
     ///
+    ///  4.Collecting leaves an `Vec` from an `Iter` is slower than single threading for
+    ///    to hash 1000 leaves. It appears there is a lot of memory copying. This approach
+    ///    looks the most promising.
+    ///
+    ///         fn add_leaves(merkle_tree: &mut MerkleTree<T, H>, leaves: Iter<T>) {
+    ///           leaves.map(|leaf| leaf.clone()).collect::<Vec<T>>().par_iter()
+    ///             .map(|leaf| <H as MerkleTreeHasher<T>>::hash_leaf(leaf))
+    ///             .collect_into_vec(&mut merkle_tree.tree);
+    ///         }
+    ///
     /// 4. Using Rayon's `par_bridge` reorders the results compared to the original leaf indices.
     ///    This has the advantage of working with exist fn parameters. The disadvantage is that
     ///    `par_bridge` does not keep the original ordering of the iterator. The indices of the
@@ -53,16 +63,7 @@ mod tests {
     ///         unreasonable burden to place on the caller. Since the indices of the leaf hashes would
     ///         not match those passed in, it still seems prone to coding mistakes by callers.
     ///
-    ///      **b.** Collecting leaves an `Vec` from an `Iter` is slower than single threading for
-    ///         to hash 1000 leaves. It appears there is too much memory copying.
-    ///
-    ///         fn add_leaves(merkle_tree: &mut MerkleTree<T, H>, leaves: Iter<T>) {
-    ///           leaves.map(|leaf| leaf.clone()).collect::<Vec<T>>().par_iter()
-    ///             .map(|leaf| <H as MerkleTreeHasher<T>>::hash_leaf(leaf))
-    ///             .collect_into_vec(&mut merkle_tree.tree);
-    ///         }
-    ///
-    ///      **c.** Calling `Iter.enumerate()` before `par_bridge()` is slower than a single thread
+    ///      **b.** Calling `Iter.enumerate()` before `par_bridge()` is slower than a single thread
     ///         to hash 1000 leaves. It appears there is too much memory copying and allocation.
     ///
     ///         fn add_leaves(merkle_tree: &mut MerkleTree<T, H>, leaves: Iter<T>) {

@@ -75,7 +75,7 @@ mod tests {
 
     impl Blake3MerkleLiteAlgorithm {}
 
-    const LEN: usize = 10;
+    const LEN: usize = 10000;
 
     #[bench]
     fn bench_blake3_node_depth_merkle_tree(bencher: &mut Bencher) {

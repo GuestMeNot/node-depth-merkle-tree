@@ -17,7 +17,8 @@ Current version: {{version}}
 
   **`parallel_hashing`** - Enables parallel hashing. This is highly experimental!
         `parallel_hashing` looks most promising for a higher number of cores and a large number of leaves.
-        It should be tested in your environment.
+        It should be tested in your environment. Currently, this only works in parallel for leaf hashes.
+        See benches/rayon_bench.rs for more information.
 
 ### Examples
 

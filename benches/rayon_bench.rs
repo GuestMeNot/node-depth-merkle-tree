@@ -38,7 +38,7 @@ mod tests {
     ///
     ///  4.Collecting leaves an `Vec` from an `Iter` is slower than single threading for
     ///    to hash 1000 leaves. It appears there is a lot of memory copying. This approach
-    ///    looks the most promising.
+    ///    approach has been implemented to create leaf hashes. See below for interior hashes.
     ///
     ///         fn add_leaves(merkle_tree: &mut MerkleTree<T, H>, leaves: Iter<T>) {
     ///           leaves.map(|leaf| leaf.clone()).collect::<Vec<T>>().par_iter()
@@ -80,6 +80,20 @@ mod tests {
     ///    this approach would be faster than `par_bridge()` above.
     ///
     ///    <https://stackoverflow.com/questions/35863996/cannot-use-rayons-par-iter#35869613>
+    ///
+    /// ### Hashing Interior Hashes
+    ///
+    /// There are several approaches for hashing interior hashes:
+    ///
+    ///    1. Don't hash interior nodes. Half of the benefit is gained hashing leaf values.
+    ///
+    ///    2. Hash on a level by level basis without coordinating across levels. The question is
+    ///      at how many hashes on any given level becomes counterproductive such that single
+    ///      threading is faster.
+    ///
+    ///    3. Hash all nodes but coordinate when the next leaf can be hashed. This would require
+    ///      Semaphores or some other synchronization mechanism to know when an interior node can be
+    ///      hashed.
     #[bench]
     fn bench_blake3_par(bencher: &mut Bencher) {
         let values = gen_blake3_values("a", LEN);

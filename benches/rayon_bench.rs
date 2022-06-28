@@ -85,7 +85,8 @@ mod tests {
     ///    This approach would behave more like C++ but uses `unsafe`.
     ///    Memory locations would need to be initialized in the `Vec` beforehand.
     ///    It would be ideal if [MerkleTreeHasher](crate:MerkleTreeHasher)s could hash directly
-    ///    into the initialized memory location of the node.
+    ///    into the initialized memory location of the node. This approach would also need an
+    ///    `unsafe_hashing` feature so that callers can opt into the behavior if desired.
     ///
     /// ### Hashing Interior Hashes
     ///

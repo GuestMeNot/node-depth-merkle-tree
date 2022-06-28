@@ -81,6 +81,12 @@ mod tests {
     ///
     ///    <https://stackoverflow.com/questions/35863996/cannot-use-rayons-par-iter#35869613>
     ///
+    /// 6. Use `ptr` and `unsafe` to avoid excessive hidden memcpy.
+    ///    This approach would behave more like C++ but uses `unsafe`.
+    ///    Memory locations would need to be initialized in the `Vec` beforehand.
+    ///    It would be ideal if [MerkleTreeHasher](crate:MerkleTreeHasher)s could hash directly
+    ///    into the initialized memory location of the node.
+    ///
     /// ### Hashing Interior Hashes
     ///
     /// There are several approaches for hashing interior hashes:

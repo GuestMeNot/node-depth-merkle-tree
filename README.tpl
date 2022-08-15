@@ -3,6 +3,34 @@
 
 Current version: {{version}}
 
+# This project creates a Merkle Tree and Merkle Proof.
+
+## What is a Merkle Tree?
+
+Imagine you have a magic brush that paints things a color:
+
+  - when you paint a baseball it turns blue.
+  - when you paint a baseball glove it turns yellow.
+  - if you paint a second baseball it will still turn blue.
+  - if you repaint both blue baseballs at the same time they will turn dark blue.
+  - if you repaint both dark blue baseballs and the yellow baseball glove at the same time they all turn green.
+
+Side NOTE:
+
+  - if you paint an unpainted baseball and a yellow glove at the same time they will all turn pale yellow.
+  - if you paint an unpainted baseball and a blue baseball they will both turn pale blue.
+  - The colors never repeat. For example, you can't paint the dark blue items
+        and the pale blue items at the same time and get the original blue baseball color.
+
+This example illustrates the basics of a Merkle Tree:
+
+  - when you input a value say A, it always returns B just like painting a baseball turning blue.
+  - when you input another value C, it will always return D just like the glove turning yellow.
+  - when you input two values like B and D it always returns G just like the blue baseball and the yellow glove both turning green.
+  - when you input two values that are identical say B and B it returns a different value DB just like the 2 blue baseballs turn dark blue.
+  - when you input a input value A and D it will not return the same value as inputting B and D.
+  - when you input a input value A and B it will not return the same value as inputting B and B.
+
 {{readme}}
 
   **`default`** - Enables the **`sha256_hash`** feature.

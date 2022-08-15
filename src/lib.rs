@@ -1,5 +1,4 @@
 #![feature(in_band_lifetimes)]
-//! Creates a Merkle Tree and Merkle Proof.
 //!
 //! ## Why another Merkle Tree?
 //!
